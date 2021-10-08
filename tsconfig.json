@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "outDir": ".",
+      "jsx": "react",
+      "allowJs": true
+    },
+    "include": ["src"],
+    "exclude": ["node_modules"]
+}
