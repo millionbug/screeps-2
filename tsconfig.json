@@ -1,18 +1,15 @@
 {
     "compilerOptions": {
         "target": "es2017",
+        "moduleResolution": "Node",
         "module": "commonjs",
-        "moduleResolution": "Node", 
         "baseUrl": "./",
         "allowSyntheticDefaultImports": true,
-        "paths": {
-            "@/*": ["./src/*"]
-        }
     },
     "exclude": [
         "node_modules"
     ],
     "include": [
-        "src/**/*.ts", "main.temp.ts"
-    ]
+        "src/**/*.ts", "main.ts"
+, "checkBuild.ts"    ]
 }

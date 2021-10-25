@@ -1,4 +1,4 @@
-import { checkAllCHits, isDanger } from "./utils";
+import { checkAllCHits, isDanger } from "./checkConstructor";
 import TaskList, { TaskAction } from './task';
 
 export function repair(creep: Creep, target) {

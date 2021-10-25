@@ -38,10 +38,11 @@ export function goToWork() {
     }
 
     const upGradeTask = TaskList.list.find(task => task.action === TaskAction.repair);
-
+console.log('upGradeTask', upGradeTask, 'upGraders', upGraders)
     if (upGradeTask) {
         upGraders.forEach(upGrader => {
             if(upGrader.store[RESOURCE_ENERGY] == 0) {
+                console.log('buxqu采药吗')
                 const sources = upGrader.room.find(FIND_SOURCES);
                 if(upGrader.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
                     upGrader.moveTo(sources[0]);

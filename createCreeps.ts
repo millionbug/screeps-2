@@ -4,7 +4,7 @@ let index = 0;
 
 function Create(actionType: TaskAction) {
     // find the first or 0th spawn in the room
-    let spawn = Game.rooms[0].find(FIND_MY_SPAWNS)[0];
+    let spawn = Object.values(Game.rooms)[0].find(FIND_MY_SPAWNS)[0];
     let result = spawn.spawnCreep([WORK, MOVE, CARRY], (index++).toString(), {memory: {action: actionType}});
 }
 
