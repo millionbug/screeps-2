@@ -1,58 +1,62 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.goToWork = void 0;
+exports.goToWork = exports.work = void 0;
 const creepsList_1 = require("./creepsList");
 const task_1 = require("./task");
+function work(creep, workFn) {
+    if (creep.store[RESOURCE_ENERGY] == 0) {
+        const sources = creep.room.find(FIND_SOURCES);
+        if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(sources[0]);
+        }
+    }
+    else {
+        workFn();
+    }
+}
+exports.work = work;
 function goToWork() {
     const { repairers, builders, upGraders } = creepsList_1.default;
     const repairTask = task_1.default.list.find(task => task.action === task_1.TaskAction.repair);
     if (repairTask) {
+        const workFn = (repairer) => {
+            return () => {
+                const target = Game.structures[repairTask.targetId];
+                if (repairer.repair(target) == ERR_NOT_IN_RANGE) {
+                    repairer.moveTo(target);
+                }
+            };
+        };
         repairers.forEach(repairer => {
-            if (repairer.store[RESOURCE_ENERGY] == 0) {
-                const sources = repairer.room.find(FIND_SOURCES);
-                if (repairer.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                    repairer.moveTo(sources[0]);
-                }
-            }
-            else {
-                if (repairer.repair(Game.getObjectById(repairTask.targetId)) == ERR_NOT_IN_RANGE) {
-                    repairer.moveTo(repairer.room.controller);
-                }
-            }
+            work(repairer, workFn(repairer));
         });
     }
     const buildTask = task_1.default.list.find(task => task.action === task_1.TaskAction.repair);
     if (buildTask) {
+        const workFn = (builder) => {
+            return () => {
+                const target = Game.constructionSites[repairTask.targetId];
+                if (builder.build(target) == ERR_NOT_IN_RANGE) {
+                    builder.moveTo(target);
+                }
+            };
+        };
         builders.forEach(builder => {
-            if (builder.store[RESOURCE_ENERGY] == 0) {
-                const sources = builder.room.find(FIND_SOURCES);
-                if (builder.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                    builder.moveTo(sources[0]);
-                }
-            }
-            else {
-                if (builder.build(Game.getObjectById(buildTask.targetId)) == ERR_NOT_IN_RANGE) {
-                    builder.moveTo(builder.room.controller);
-                }
-            }
+            work(builder, workFn(builder));
         });
     }
     const upGradeTask = task_1.default.list.find(task => task.action === task_1.TaskAction.repair);
-    console.log('upGradeTask', upGradeTask, 'upGraders', upGraders);
     if (upGradeTask) {
+        const workFn = (upGrader) => {
+            return () => {
+                const target = upGrader.room.controller;
+                if (upGrader.upgradeController(target) == ERR_NOT_IN_RANGE) {
+                    upGrader.moveTo(target);
+                }
+            };
+        };
         upGraders.forEach(upGrader => {
-            if (upGrader.store[RESOURCE_ENERGY] == 0) {
-                console.log('buxqu采药吗');
-                const sources = upGrader.room.find(FIND_SOURCES);
-                if (upGrader.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                    upGrader.moveTo(sources[0]);
-                }
-            }
-            else {
-                if (upGrader.upgradeController(Game.getObjectById(upGradeTask.targetId)) == ERR_NOT_IN_RANGE) {
-                    upGrader.moveTo(upGrader.room.controller);
-                }
-            }
+            work(upGrader, workFn(upGrader));
         });
     }
 }
