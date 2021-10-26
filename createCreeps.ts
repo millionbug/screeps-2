@@ -14,13 +14,13 @@ function Create(actionType: TaskAction) {
 export function createCreeps() {
     const { repairers, builders, upGraders } = CreepsList;
     const repairTask = TaskList.list.find(task => task.action === TaskAction.repair);
-    const buildTask = TaskList.list.find(task => task.action === TaskAction.repair);
-    const upGradeTask = TaskList.list.find(task => task.action === TaskAction.repair);
+    const buildTask = TaskList.list.find(task => task.action === TaskAction.build);
+    const upGradeTask = TaskList.list.find(task => task.action === TaskAction.upgrade);
 
     if (repairers.length < 2 && repairTask) {
         Create(TaskAction.repair);
     }
-    if (builders.length < 2 && buildTask) {
+    if (builders.length < 4 && buildTask) {
         Create(TaskAction.build);
     }
     if (upGraders.length < 2) {

@@ -1,17 +1,18 @@
 import TaskList, { Task, TaskAction, WorkingStatus } from './task';
-
+import sourceTable from './source';
 
 
 export function work(creep: Creep, workFn: () => void) {
-    const sources = creep.room.find(FIND_SOURCES);
+    const source = sourceTable.findSourceAble(creep);
+    sourceTable.markCreep(creep, source.id);
     creep.say(creep.store.energy.toString())
     creep.say(creep.memory.workStatus)
     
-    if(creep.store.energy == 0 && creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(sources[0]);
+    if(creep.store.energy == 0 && creep.harvest(source) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(source);
         creep.memory.workStatus = WorkingStatus.harvesting
     } else if (creep.memory.workStatus === WorkingStatus.harvesting && creep.store.energy < creep.store.getCapacity()) {
-        const result = creep.harvest(sources[0]);
+        const result = creep.harvest(source);
         creep.say(result.toString())
     } else {
         workFn();

@@ -2,16 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.repairWork = exports.repair = exports.buildWork = exports.build = exports.upGraderWork = exports.upGrader = exports.work = void 0;
 const task_1 = require("./task");
+const source_1 = require("./source");
 function work(creep, workFn) {
-    const sources = creep.room.find(FIND_SOURCES);
+    const source = source_1.default.findSourceAble(creep);
+    source_1.default.markCreep(creep, source.id);
     creep.say(creep.store.energy.toString());
     creep.say(creep.memory.workStatus);
-    if (creep.store.energy == 0 && creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(sources[0]);
+    if (creep.store.energy == 0 && creep.harvest(source) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(source);
         creep.memory.workStatus = task_1.WorkingStatus.harvesting;
     }
     else if (creep.memory.workStatus === task_1.WorkingStatus.harvesting && creep.store.energy < creep.store.getCapacity()) {
-        const result = creep.harvest(sources[0]);
+        const result = creep.harvest(source);
         creep.say(result.toString());
     }
     else {
