@@ -6,7 +6,7 @@ function isDanger(structure) {
     const maxHits = structure.hitsMax;
     const hits = structure.hits;
     const currPercent = hits / maxHits;
-    return currPercent > DangerHits ? currPercent : false;
+    return currPercent < DangerHits ? currPercent : false;
 }
 exports.isDanger = isDanger;
 function checkAllCHits() {

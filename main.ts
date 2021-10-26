@@ -2,15 +2,16 @@ import {checkRepairTask} from './checkRepair';
 import { checkBuildTask } from './checkBuild';
 import { checkUpgrade } from './checkUpgrade';
 import { goToWork } from './goToWork';
-import { checkActive, createCreeps } from './createCreeps';
+import { createCreeps } from './createCreeps';
 import TaskList from './task';
 import { updateCreepsList } from 'creepsList';
 
 export function loop() {
 
+    // 检查 creeps 
     updateCreepsList();
 
-    checkActive();
+    TaskList.checkList();
 
     checkRepairTask();
     checkBuildTask();

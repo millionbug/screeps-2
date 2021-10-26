@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateCreepsList = exports.CreepsList = void 0;
+exports.updateCreepsList = exports.checkActive = exports.CreepsList = void 0;
 const task_1 = require("./task");
 class CreepsList {
     constructor() {
@@ -11,11 +11,21 @@ class CreepsList {
 }
 exports.CreepsList = CreepsList;
 const ListInstance = new CreepsList();
+function checkActive() {
+    for (var name in Memory.creeps) {
+        if (!Game.creeps[name]) {
+            delete Memory.creeps[name];
+            console.log('Clearing non-existing creep memory:', name);
+        }
+    }
+}
+exports.checkActive = checkActive;
 function updateCreepsList() {
     const creeps = Object.values(Game.creeps);
     const repairers = [];
     const builders = [];
     const upGraders = [];
+    checkActive();
     creeps.forEach((creep) => {
         if (creep.memory.action === task_1.TaskAction.repair) {
             repairers.push(creep);

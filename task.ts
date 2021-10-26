@@ -5,6 +5,16 @@ export enum TaskAction {
     build = 'build',
     upgrade = 'upgrade'
 }
+
+export enum WorkingStatus {
+    repairing = 'repairing',
+    creating = 'creating',
+    harvesting = 'harvesting',
+    building = 'building',
+    upgradeing = 'upgradeing',
+    relaxing = 'relaxing'
+}
+
 export interface Task {
     action: TaskAction;
     targetId: string;

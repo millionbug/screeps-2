@@ -1,62 +1,41 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.goToWork = exports.work = void 0;
+exports.goToWork = void 0;
 const creepsList_1 = require("./creepsList");
 const task_1 = require("./task");
-function work(creep, workFn) {
-    if (creep.store[RESOURCE_ENERGY] == 0) {
-        const sources = creep.room.find(FIND_SOURCES);
-        if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(sources[0]);
-        }
-    }
-    else {
-        workFn();
-    }
-}
-exports.work = work;
+const work_1 = require("./work");
 function goToWork() {
     const { repairers, builders, upGraders } = creepsList_1.default;
     const repairTask = task_1.default.list.find(task => task.action === task_1.TaskAction.repair);
+    const buildTask = task_1.default.list.find(task => task.action === task_1.TaskAction.build);
+    const upGradeTask = task_1.default.list.find(task => task.action === task_1.TaskAction.upgrade);
     if (repairTask) {
-        const workFn = (repairer) => {
-            return () => {
-                const target = Game.structures[repairTask.targetId];
-                if (repairer.repair(target) == ERR_NOT_IN_RANGE) {
-                    repairer.moveTo(target);
-                }
-            };
-        };
+        console.log(repairTask.targetId);
         repairers.forEach(repairer => {
-            work(repairer, workFn(repairer));
+            (0, work_1.repairWork)(repairer, repairTask);
         });
     }
-    const buildTask = task_1.default.list.find(task => task.action === task_1.TaskAction.repair);
-    if (buildTask) {
-        const workFn = (builder) => {
-            return () => {
-                const target = Game.constructionSites[repairTask.targetId];
-                if (builder.build(target) == ERR_NOT_IN_RANGE) {
-                    builder.moveTo(target);
-                }
-            };
-        };
-        builders.forEach(builder => {
-            work(builder, workFn(builder));
+    else if (buildTask) {
+        console.log('不是没有 repair 任务了么2');
+        repairers.forEach(repairer => {
+            (0, work_1.buildWork)(repairer, buildTask);
         });
     }
-    const upGradeTask = task_1.default.list.find(task => task.action === task_1.TaskAction.repair);
     if (upGradeTask) {
-        const workFn = (upGrader) => {
-            return () => {
-                const target = upGrader.room.controller;
-                if (upGrader.upgradeController(target) == ERR_NOT_IN_RANGE) {
-                    upGrader.moveTo(target);
-                }
-            };
-        };
+        console.log(upGradeTask.targetId);
         upGraders.forEach(upGrader => {
-            work(upGrader, workFn(upGrader));
+            (0, work_1.upGraderWork)(upGrader);
+        });
+    }
+    else if (buildTask) {
+        upGraders.forEach(upGrader => {
+            (0, work_1.buildWork)(upGrader, buildTask);
+        });
+    }
+    if (buildTask) {
+        console.log(buildTask.targetId);
+        builders.forEach(builder => {
+            (0, work_1.buildWork)(builder, buildTask);
         });
     }
 }

@@ -1,23 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createCreeps = exports.checkActive = void 0;
+exports.createCreeps = void 0;
 const task_1 = require("./task");
 const creepsList_1 = require("./creepsList");
 let index = 0;
 function Create(actionType) {
     // find the first or 0th spawn in the room
     let spawn = Object.values(Game.rooms)[0].find(FIND_MY_SPAWNS)[0];
-    let result = spawn.spawnCreep([WORK, MOVE, CARRY], (index++).toString(), { memory: { action: actionType } });
+    let result = spawn.spawnCreep([WORK, MOVE, CARRY], (index++).toString(), { memory: {
+            action: actionType,
+            workStatus: task_1.WorkingStatus.relaxing
+        } });
 }
-function checkActive() {
-    for (var name in Memory.creeps) {
-        if (!Game.creeps[name]) {
-            delete Memory.creeps[name];
-            console.log('Clearing non-existing creep memory:', name);
-        }
-    }
-}
-exports.checkActive = checkActive;
 function createCreeps() {
     const { repairers, builders, upGraders } = creepsList_1.default;
     const repairTask = task_1.default.list.find(task => task.action === task_1.TaskAction.repair);
