@@ -2,11 +2,12 @@ import CreepsList from './creepsList';
 import TaskList, { TaskAction } from './task';
 
 export function work(creep: Creep, workFn) {
-    if(creep.store[RESOURCE_ENERGY] == 0) {
-        const sources = creep.room.find(FIND_SOURCES);
-        if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(sources[0]);
-        }
+    const sources = creep.room.find(FIND_SOURCES);
+    if(creep.store.energy == 0 && creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(sources[0]);
+        creep.memory.workStatus = WorkingStatus.harvesting
+    } else if (creep.memory.workStatus === WorkingStatus.harvesting && creep.store.energy < creep.store.getCapacity()) {
+        creep.harvest(sources[0]);
     } else {
         workFn();
     }

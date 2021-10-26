@@ -1,3 +1,4 @@
+import { TaskAction } from './task';
 export class CreepsList {
     repairers: Creep[] = [];
     builders: Creep[] = [];
