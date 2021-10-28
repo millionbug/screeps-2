@@ -58,7 +58,6 @@ class sourceTable {
             const creepList = (this[sMap.id] || []) as string[];
             if (creepList.length) {
                 this[sMap.id] = creepList.filter(creep => Game.creeps[creep]?.id);
-                console.log(sMap.id, this[sMap.id]);
             }
         })
     }

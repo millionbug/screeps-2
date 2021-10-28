@@ -48,7 +48,6 @@ class sourceTable {
             const creepList = (this[sMap.id] || []);
             if (creepList.length) {
                 this[sMap.id] = creepList.filter(creep => { var _a; return (_a = Game.creeps[creep]) === null || _a === void 0 ? void 0 : _a.id; });
-                console.log(sMap.id, this[sMap.id]);
             }
         });
     }

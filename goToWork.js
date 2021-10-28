@@ -10,7 +10,7 @@ function goToWork() {
     const buildTask = task_1.default.list.find(task => task.action === task_1.TaskAction.build);
     const upGradeTask = task_1.default.list.find(task => task.action === task_1.TaskAction.upgrade);
     if (repairTask) {
-        console.log(repairTask.targetId);
+        console.log(repairTask.targetId, 'repairTask.targetId');
         repairers.forEach(repairer => {
             (0, work_1.repairWork)(repairer, repairTask);
         });
@@ -28,6 +28,11 @@ function goToWork() {
     else if (buildTask) {
         upGraders.forEach(upGrader => {
             (0, work_1.buildWork)(upGrader, buildTask);
+        });
+    }
+    else if (repairTask) {
+        upGraders.forEach(upGrader => {
+            (0, work_1.repairWork)(upGrader, repairTask);
         });
     }
     if (buildTask) {

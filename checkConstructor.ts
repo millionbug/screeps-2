@@ -1,3 +1,5 @@
+import { findStructureByType } from "utils";
+
 const DangerHits = 1 / 3;
 
 export function isDanger(structure: Structure<StructureConstant>) {
@@ -8,8 +10,8 @@ export function isDanger(structure: Structure<StructureConstant>) {
 }
 
 export function checkAllCHits() {
-    const structures = Game.structures;
-    return Object.keys(structures).map((key) => {
+    const structures = findStructureByType(STRUCTURE_ROAD);
+    return Object.keys(structures).map((key, index) => {
         const structure = structures[key];
         const currPercent = isDanger(structure)
         if (currPercent) {

@@ -70,7 +70,7 @@ function buildWork(builder, buildTask) {
 exports.buildWork = buildWork;
 function repair(repairer, repairTask) {
     return () => {
-        const target = Game.structures[repairTask.targetId];
+        const target = Object.values(Game.rooms)[0].find(FIND_STRUCTURES).filter(stru => stru.id === repairTask.targetId)[0];
         if (repairer.repair(target) == ERR_NOT_IN_RANGE) {
             repairer.moveTo(target);
         }

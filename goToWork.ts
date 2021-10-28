@@ -12,7 +12,7 @@ export function goToWork() {
 
 
     if (repairTask) {
-        console.log(repairTask.targetId)
+        console.log(repairTask.targetId, 'repairTask.targetId')
         repairers.forEach(repairer => {
             repairWork(repairer, repairTask);
         })
@@ -30,6 +30,10 @@ export function goToWork() {
     } else if (buildTask) {
         upGraders.forEach(upGrader => {
             buildWork(upGrader, buildTask);
+        })
+    } else if (repairTask) {
+        upGraders.forEach(upGrader => {
+            repairWork(upGrader, repairTask);
         })
     }
 
