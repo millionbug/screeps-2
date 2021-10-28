@@ -11,7 +11,8 @@ function checkBuildTask() {
             action: task_1.TaskAction.build,
             targetId: target.id,
             couldCancel: () => {
-                return target.progressTotal === target.progress;
+                const currentT = Game.constructionSites[target.id];
+                return !currentT || (currentT.progressTotal === currentT.progress);
             }
         });
     }

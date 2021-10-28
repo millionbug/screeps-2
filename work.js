@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.repairWork = exports.repair = exports.buildWork = exports.build = exports.upGraderWork = exports.upGrader = exports.work = void 0;
+exports.harverstWork = exports.repairWork = exports.repair = exports.buildWork = exports.build = exports.upGraderWork = exports.upGrader = exports.work = void 0;
 const task_1 = require("./task");
 const source_1 = require("./source");
 function work(creep, workFn) {
@@ -91,3 +91,6 @@ function repairWork(repairer, repairTask) {
     work(repairer, repair(repairer, repairTask));
 }
 exports.repairWork = repairWork;
+function harverstWork(creep) {
+}
+exports.harverstWork = harverstWork;

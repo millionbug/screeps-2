@@ -4,7 +4,7 @@ import { upGraderWork, buildWork, repairWork } from './work';
 
 
 export function goToWork() {
-    const { repairers, builders, upGraders } = CreepsList;
+    const { repairers, builders, upGraders, harversters } = CreepsList;
     
     const repairTask = TaskList.list.find(task => task.action === TaskAction.repair);
     const buildTask = TaskList.list.find(task => task.action === TaskAction.build);
@@ -17,7 +17,6 @@ export function goToWork() {
             repairWork(repairer, repairTask);
         })
     } else if (buildTask) {
-        console.log('不是没有 repair 任务了么2')
         repairers.forEach(repairer => {
             buildWork(repairer, buildTask);
         })
@@ -25,8 +24,6 @@ export function goToWork() {
 
 
     if (upGradeTask) {
-        console.log(upGradeTask.targetId)
-
         upGraders.forEach(upGrader => {
             upGraderWork(upGrader)
         })
@@ -37,10 +34,12 @@ export function goToWork() {
     }
 
     if (buildTask) {
-        console.log(buildTask.targetId)
-
         builders.forEach(builder => {
             buildWork(builder, buildTask);
         })
     }
+
+    // if (harversters) {
+    //     harversters.forEach(creep => )
+    // }
 }

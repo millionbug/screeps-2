@@ -3,17 +3,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createCreeps = void 0;
 const task_1 = require("./task");
 const creepsList_1 = require("./creepsList");
+const utils_1 = require("./utils");
 let index = 0;
-function Create(actionType) {
-    // find the first or 0th spawn in the room
-    let spawn = Object.values(Game.rooms)[0].find(FIND_MY_SPAWNS)[0];
-    let result = spawn.spawnCreep([WORK, MOVE, CARRY], (index++).toString(), { memory: {
+function Create(actionType, createOptions) {
+    const spawn = Object.values(Game.rooms)[0].find(FIND_MY_SPAWNS)[0];
+    const name = (index++).toString();
+    const body = (createOptions === null || createOptions === void 0 ? void 0 : createOptions.body) || [WORK, MOVE, CARRY];
+    let result = spawn && spawn.spawnCreep(body, name, { memory: {
             action: actionType,
             workStatus: task_1.WorkingStatus.relaxing
         } });
 }
+function createHaverster() {
+    Create(task_1.TaskAction.harvest, {
+        body: [WORK, WORK, MOVE]
+    });
+}
 function createCreeps() {
-    const { repairers, builders, upGraders } = creepsList_1.default;
+    const { repairers, builders, upGraders, harversters } = creepsList_1.default;
     const repairTask = task_1.default.list.find(task => task.action === task_1.TaskAction.repair);
     const buildTask = task_1.default.list.find(task => task.action === task_1.TaskAction.build);
     const upGradeTask = task_1.default.list.find(task => task.action === task_1.TaskAction.upgrade);
@@ -25,6 +32,9 @@ function createCreeps() {
     }
     if (upGraders.length < 2) {
         Create(task_1.TaskAction.upgrade);
+    }
+    if ((0, utils_1.findStructureByType)(STRUCTURE_CONTAINER).length < harversters.length) {
+        createHaverster();
     }
 }
 exports.createCreeps = createCreeps;

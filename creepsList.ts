@@ -1,8 +1,10 @@
 import { TaskAction } from './task';
+import sourceTable from './source';
 export class CreepsList {
     repairers: Creep[] = [];
     builders: Creep[] = [];
     upGraders: Creep[] = [];
+    harversters: Creep[] = [];
 }
 
 const ListInstance = new CreepsList();
@@ -22,8 +24,12 @@ export function updateCreepsList() {
     const repairers: Creep[] = [];
     const builders: Creep[] = [];
     const upGraders: Creep[] = [];
+    const harversters: Creep[] = [];
 
+    // 清除已死去的 creep 的 memory 信息
     checkActive();
+    // 清除已死去的登记在 source 中的信息
+    sourceTable.checkCreepActive();
 
     creeps.forEach((creep) => {
         if (creep.memory.action === TaskAction.repair) {
@@ -34,6 +40,9 @@ export function updateCreepsList() {
         }
         if (creep.memory.action === TaskAction.upgrade) {
             upGraders.push(creep);
+        }
+        if (creep.memory.action === TaskAction.harvest) {
+            harversters.push(creep);
         }
     });
 

@@ -80,3 +80,7 @@ export function repair(repairer: Creep, repairTask: Task) {
 export function repairWork(repairer: Creep, repairTask: Task) {
     work(repairer, repair(repairer, repairTask));
 }
+
+export function harverstWork(creep: Creep) {
+    
+}

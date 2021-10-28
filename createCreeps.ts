@@ -1,18 +1,29 @@
 import TaskList, { TaskAction, WorkingStatus } from './task';
 import CreepsList from './creepsList';
+import { findStructureByType } from './utils';
+
 let index = 0;
 
-function Create(actionType: TaskAction) {
-    // find the first or 0th spawn in the room
-    let spawn = Object.values(Game.rooms)[0].find(FIND_MY_SPAWNS)[0];
-    let result = spawn.spawnCreep([WORK, MOVE, CARRY], (index++).toString(), {memory: {
+function Create(actionType: TaskAction, createOptions?: {
+    body: BodyPartConstant[]
+}) {
+    const spawn = Object.values(Game.rooms)[0].find(FIND_MY_SPAWNS)[0];
+    const name = (index++).toString();
+    const body = createOptions?.body || [WORK, MOVE, CARRY];
+    let result = spawn && spawn.spawnCreep(body, name, {memory: {
         action: actionType,
         workStatus: WorkingStatus.relaxing
     }});
 }
 
+function createHaverster() {
+    Create(TaskAction.harvest, {
+        body: [WORK, WORK, MOVE]
+    })
+}
+
 export function createCreeps() {
-    const { repairers, builders, upGraders } = CreepsList;
+    const { repairers, builders, upGraders, harversters } = CreepsList;
     const repairTask = TaskList.list.find(task => task.action === TaskAction.repair);
     const buildTask = TaskList.list.find(task => task.action === TaskAction.build);
     const upGradeTask = TaskList.list.find(task => task.action === TaskAction.upgrade);
@@ -25,5 +36,8 @@ export function createCreeps() {
     }
     if (upGraders.length < 2) {
         Create(TaskAction.upgrade);
+    }
+    if (findStructureByType(STRUCTURE_CONTAINER).length < harversters.length) {
+        createHaverster();
     }
 }
