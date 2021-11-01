@@ -27,7 +27,8 @@ class TaskMemory {
     }
     checkList() {
         this.list = this.list.filter(task => {
-            return !task.couldCancel();
+            const result = task.couldCancel();
+            return !result;
         });
     }
 }

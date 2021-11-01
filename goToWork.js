@@ -9,35 +9,38 @@ function goToWork() {
     const repairTask = task_1.default.list.find(task => task.action === task_1.TaskAction.repair);
     const buildTask = task_1.default.list.find(task => task.action === task_1.TaskAction.build);
     const upGradeTask = task_1.default.list.find(task => task.action === task_1.TaskAction.upgrade);
+    let notWorkCreeps = [];
     if (repairTask) {
-        console.log(repairTask.targetId, 'repairTask.targetId');
         repairers.forEach(repairer => {
             (0, work_1.repairWork)(repairer, repairTask);
         });
     }
-    else if (buildTask) {
-        repairers.forEach(repairer => {
-            (0, work_1.buildWork)(repairer, buildTask);
-        });
+    else {
+        notWorkCreeps = notWorkCreeps.concat(repairers);
     }
     if (upGradeTask) {
         upGraders.forEach(upGrader => {
             (0, work_1.upGraderWork)(upGrader);
         });
     }
-    else if (buildTask) {
-        upGraders.forEach(upGrader => {
-            (0, work_1.buildWork)(upGrader, buildTask);
-        });
-    }
-    else if (repairTask) {
-        upGraders.forEach(upGrader => {
-            (0, work_1.repairWork)(upGrader, repairTask);
-        });
+    else {
+        notWorkCreeps = notWorkCreeps.concat(upGraders);
     }
     if (buildTask) {
         builders.forEach(builder => {
             (0, work_1.buildWork)(builder, buildTask);
+        });
+    }
+    else {
+        notWorkCreeps = notWorkCreeps.concat(builders);
+    }
+    const methods = [work_1.repairWork, work_1.buildWork, work_1.upGraderWork];
+    const tasks = [repairTask, buildTask, upGradeTask];
+    const index = tasks.findIndex(Boolean);
+    if (notWorkCreeps.length) {
+        // console.log(tasks[index], index, 'index')
+        notWorkCreeps.forEach(creep => {
+            methods[index](creep, tasks[index]);
         });
     }
     // if (harversters) {

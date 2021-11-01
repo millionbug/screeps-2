@@ -5,6 +5,8 @@ export function repair(creep: Creep, target) {
 
 }
 
+const golHtx = 1 / 2;
+
 export function checkRepairTask() {
   const hitsDanger = checkAllCHits();
   if (hitsDanger.length) {
@@ -13,7 +15,8 @@ export function checkRepairTask() {
     TaskList.addTask({
       action: TaskAction.repair,
       targetId: first.structure.id,
-      couldCancel: () => !isDanger(first.structure),
+      // todo 找不到原因，先判断是不是target 不存在了，但是 repair 任务还没有取消
+      couldCancel: () => !isDanger(Game.getObjectById(first.structure.id) as any, golHtx),
     });
   }
 }

@@ -71,7 +71,9 @@ exports.buildWork = buildWork;
 function repair(repairer, repairTask) {
     return () => {
         const target = Object.values(Game.rooms)[0].find(FIND_STRUCTURES).filter(stru => stru.id === repairTask.targetId)[0];
-        if (repairer.repair(target) == ERR_NOT_IN_RANGE) {
+        const result = repairer.repair(target);
+        repairer.say(result.toString());
+        if (result == ERR_NOT_IN_RANGE) {
             repairer.moveTo(target);
         }
         else if (repairer.memory.workStatus === task_1.WorkingStatus.repairing) {

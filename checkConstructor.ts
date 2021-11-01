@@ -2,11 +2,11 @@ import { findStructureByType } from "utils";
 
 const DangerHits = 1 / 3;
 
-export function isDanger(structure: Structure<StructureConstant>) {
+export function isDanger(structure: Structure<StructureConstant>, gol?: number) {
     const maxHits = structure.hitsMax;
     const hits = structure.hits;
     const currPercent = hits / maxHits;
-    return currPercent < DangerHits ? currPercent : false;
+    return currPercent < (gol || DangerHits) ? currPercent : false;
 }
 
 export function checkAllCHits() {

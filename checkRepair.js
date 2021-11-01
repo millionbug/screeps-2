@@ -6,6 +6,7 @@ const task_1 = require("./task");
 function repair(creep, target) {
 }
 exports.repair = repair;
+const golHtx = 1 / 2;
 function checkRepairTask() {
     const hitsDanger = (0, checkConstructor_1.checkAllCHits)();
     if (hitsDanger.length) {
@@ -14,7 +15,8 @@ function checkRepairTask() {
         task_1.default.addTask({
             action: task_1.TaskAction.repair,
             targetId: first.structure.id,
-            couldCancel: () => !(0, checkConstructor_1.isDanger)(first.structure),
+            // todo 找不到原因，先判断是不是target 不存在了，但是 repair 任务还没有取消
+            couldCancel: () => !(0, checkConstructor_1.isDanger)(Game.getObjectById(first.structure.id), golHtx),
         });
     }
 }
