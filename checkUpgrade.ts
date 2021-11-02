@@ -1,7 +1,7 @@
+import { room } from './source';
 import TaskList, { TaskAction } from './task';
 
 export function checkUpgrade() {
-    const room = Object.values(Game.rooms)[0];
     if (!TaskList.list.length) {
         TaskList.addTask({
             action: TaskAction.upgrade,

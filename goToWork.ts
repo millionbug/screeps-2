@@ -1,6 +1,6 @@
 import CreepsList from './creepsList';
 import TaskList, { TaskAction, WorkingStatus } from './task';
-import { upGraderWork, buildWork, repairWork } from './work';
+import { upGraderWork, buildWork, repairWork, harverstWork } from './work';
 
 
 export function goToWork() {
@@ -9,6 +9,7 @@ export function goToWork() {
     const repairTask = TaskList.list.find(task => task.action === TaskAction.repair);
     const buildTask = TaskList.list.find(task => task.action === TaskAction.build);
     const upGradeTask = TaskList.list.find(task => task.action === TaskAction.upgrade);
+    const harverstTasks = TaskList.list.filter(task => task.action === TaskAction.harvest);
 
     let notWorkCreeps: Creep[] = []
 
@@ -48,7 +49,18 @@ export function goToWork() {
     }
 
 
-    // if (harversters) {
-    //     harversters.forEach(creep => )
-    // }
+    if (harverstTasks) {
+        harverstTasks.forEach(task => {
+            if (task.currentWorker && Game.creeps[task.currentWorker.name]) {
+                harverstWork(task.currentWorker, task);
+            } else {
+                const har = harversters.find(haster => {
+                    return harverstTasks.every(t => {
+                        return t.currentWorker !== haster;
+                    })
+                });
+                harverstWork(har, task);
+            }
+        })
+    }
 }

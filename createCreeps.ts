@@ -1,13 +1,14 @@
 import TaskList, { TaskAction, WorkingStatus } from './task';
 import CreepsList from './creepsList';
 import { findStructureByType } from './utils';
+import { room } from './source';
 
 let index = 0;
 
 function Create(actionType: TaskAction, createOptions?: {
     body: BodyPartConstant[]
 }) {
-    const spawn = Object.values(Game.rooms)[0].find(FIND_MY_SPAWNS)[0];
+    const spawn = room.find(FIND_MY_SPAWNS)[0];
     const name = (index++).toString();
     const body = createOptions?.body || [WORK, MOVE, CARRY];
     let result = spawn && spawn.spawnCreep(body, name, {memory: {
@@ -27,6 +28,7 @@ export function createCreeps() {
     const repairTask = TaskList.list.find(task => task.action === TaskAction.repair);
     const buildTask = TaskList.list.find(task => task.action === TaskAction.build);
     const upGradeTask = TaskList.list.find(task => task.action === TaskAction.upgrade);
+    const harverstTasks = TaskList.list.filter(task => task.action === TaskAction.harvest);
 
     if (repairers.length < 2 && repairTask) {
         Create(TaskAction.repair);
@@ -37,7 +39,7 @@ export function createCreeps() {
     if (upGraders.length < 2) {
         Create(TaskAction.upgrade);
     }
-    if (findStructureByType(STRUCTURE_CONTAINER).length < harversters.length) {
+    if (harverstTasks.length > harversters.length) {
         createHaverster();
     }
 }

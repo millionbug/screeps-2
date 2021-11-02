@@ -9,6 +9,7 @@ function goToWork() {
     const repairTask = task_1.default.list.find(task => task.action === task_1.TaskAction.repair);
     const buildTask = task_1.default.list.find(task => task.action === task_1.TaskAction.build);
     const upGradeTask = task_1.default.list.find(task => task.action === task_1.TaskAction.upgrade);
+    const harverstTasks = task_1.default.list.filter(task => task.action === task_1.TaskAction.harvest);
     let notWorkCreeps = [];
     if (repairTask) {
         repairers.forEach(repairer => {
@@ -43,8 +44,20 @@ function goToWork() {
             methods[index](creep, tasks[index]);
         });
     }
-    // if (harversters) {
-    //     harversters.forEach(creep => )
-    // }
+    if (harverstTasks) {
+        harverstTasks.forEach(task => {
+            if (task.currentWorker && Game.creeps[task.currentWorker.name]) {
+                (0, work_1.harverstWork)(task.currentWorker, task);
+            }
+            else {
+                const har = harversters.find(haster => {
+                    return harverstTasks.every(t => {
+                        return t.currentWorker !== haster;
+                    });
+                });
+                (0, work_1.harverstWork)(har, task);
+            }
+        });
+    }
 }
 exports.goToWork = goToWork;

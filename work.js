@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.harverstWork = exports.repairWork = exports.repair = exports.buildWork = exports.build = exports.upGraderWork = exports.upGrader = exports.work = void 0;
+exports.harverstWork = exports.harverst = exports.repairWork = exports.repair = exports.buildWork = exports.build = exports.upGraderWork = exports.upGrader = exports.work = void 0;
 const task_1 = require("./task");
 const source_1 = require("./source");
 function work(creep, workFn) {
@@ -70,7 +70,7 @@ function buildWork(builder, buildTask) {
 exports.buildWork = buildWork;
 function repair(repairer, repairTask) {
     return () => {
-        const target = Object.values(Game.rooms)[0].find(FIND_STRUCTURES).filter(stru => stru.id === repairTask.targetId)[0];
+        const target = source_1.room.find(FIND_STRUCTURES).filter(stru => stru.id === repairTask.targetId)[0];
         const result = repairer.repair(target);
         repairer.say(result.toString());
         if (result == ERR_NOT_IN_RANGE) {
@@ -93,6 +93,22 @@ function repairWork(repairer, repairTask) {
     work(repairer, repair(repairer, repairTask));
 }
 exports.repairWork = repairWork;
-function harverstWork(creep) {
+function harverst(harverster, harverstTask) {
+    const source = source_1.room.find(FIND_SOURCES).find(sou => sou.id === harverstTask.targetId);
+    const container = source_1.room.lookAt(harverster.pos).find(item => { var _a; return ((_a = item.structure) === null || _a === void 0 ? void 0 : _a.structureType) === STRUCTURE_CONTAINER; });
+    if (container) {
+        harverster.harvest(source);
+    }
+    else {
+        const { x, y } = source.pos;
+        // 找到最近的一个 container
+        const container = source_1.room.lookForAtArea(LOOK_STRUCTURES, x - 1, y - 1, x + 1, y + 1, true).find(item => item.structure.structureType === STRUCTURE_CONTAINER);
+        harverster.moveTo(container.structure);
+    }
+}
+exports.harverst = harverst;
+function harverstWork(creep, harverstTask) {
+    harverstTask.currentWorker = creep;
+    harverst(creep, harverstTask);
 }
 exports.harverstWork = harverstWork;

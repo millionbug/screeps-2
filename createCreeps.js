@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createCreeps = void 0;
 const task_1 = require("./task");
 const creepsList_1 = require("./creepsList");
-const utils_1 = require("./utils");
+const source_1 = require("./source");
 let index = 0;
 function Create(actionType, createOptions) {
-    const spawn = Object.values(Game.rooms)[0].find(FIND_MY_SPAWNS)[0];
+    const spawn = source_1.room.find(FIND_MY_SPAWNS)[0];
     const name = (index++).toString();
     const body = (createOptions === null || createOptions === void 0 ? void 0 : createOptions.body) || [WORK, MOVE, CARRY];
     let result = spawn && spawn.spawnCreep(body, name, { memory: {
@@ -24,6 +24,7 @@ function createCreeps() {
     const repairTask = task_1.default.list.find(task => task.action === task_1.TaskAction.repair);
     const buildTask = task_1.default.list.find(task => task.action === task_1.TaskAction.build);
     const upGradeTask = task_1.default.list.find(task => task.action === task_1.TaskAction.upgrade);
+    const harverstTasks = task_1.default.list.filter(task => task.action === task_1.TaskAction.harvest);
     if (repairers.length < 2 && repairTask) {
         Create(task_1.TaskAction.repair);
     }
@@ -33,7 +34,7 @@ function createCreeps() {
     if (upGraders.length < 2) {
         Create(task_1.TaskAction.upgrade);
     }
-    if ((0, utils_1.findStructureByType)(STRUCTURE_CONTAINER).length < harversters.length) {
+    if (harverstTasks.length > harversters.length) {
         createHaverster();
     }
 }

@@ -1,5 +1,5 @@
 import TaskList, { Task, TaskAction, WorkingStatus } from './task';
-import sourceTable from './source';
+import sourceTable, { room } from './source';
 
 
 export function work(creep: Creep, workFn: () => void) {
@@ -63,7 +63,7 @@ export function buildWork(builder: Creep, buildTask: Task) {
 
 export function repair(repairer: Creep, repairTask: Task) {
     return () => {
-        const target = Object.values(Game.rooms)[0].find(FIND_STRUCTURES).filter(stru => stru.id === repairTask.targetId)[0];
+        const target = room.find(FIND_STRUCTURES).filter(stru => stru.id === repairTask.targetId)[0];
         const result = repairer.repair(target);
         repairer.say(result.toString());
         if(result == ERR_NOT_IN_RANGE) {
@@ -83,6 +83,20 @@ export function repairWork(repairer: Creep, repairTask: Task) {
     work(repairer, repair(repairer, repairTask));
 }
 
-export function harverstWork(creep: Creep) {
-    
+export function harverst(harverster: Creep, harverstTask: Task) {
+    const source = room.find(FIND_SOURCES).find(sou => sou.id === harverstTask.targetId);
+    const container = room.lookAt(harverster.pos).find(item => item.structure?.structureType === STRUCTURE_CONTAINER);
+    if (container) {
+        harverster.harvest(source);
+    } else {
+        const {x, y} = source.pos;
+        // 找到最近的一个 container
+        const container = room.lookForAtArea(LOOK_STRUCTURES, x - 1, y - 1, x + 1, y + 1, true).find(item => item.structure.structureType === STRUCTURE_CONTAINER);
+        harverster.moveTo(container.structure);
+    }
+}
+
+export function harverstWork(creep: Creep, harverstTask: Task) {
+    harverstTask.currentWorker = creep;
+    harverst(creep, harverstTask);
 }

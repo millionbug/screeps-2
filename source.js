@@ -1,16 +1,4 @@
 "use strict";
-// export const sourceMap = [
-//     {
-//         id: '13ef4cc9a1bcf19a7ed2697a',
-//         maxSeat: 3
-//     }, {
-//         id: 'efcf9c214c5293821999807b',
-//         maxSeat: 3
-//     }, {
-//         id: '398a2122e8c5617119a90190',
-//         maxSeat: 3
-//     }
-// ];
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sourceMap = exports.room = void 0;
 exports.room = Object.values(Game.rooms)[0];

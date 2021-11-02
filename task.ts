@@ -18,6 +18,7 @@ export enum WorkingStatus {
 export interface Task {
     action: TaskAction;
     targetId: string;
+    currentWorker?: Creep;
     couldCancel: () => boolean;
 }
 
