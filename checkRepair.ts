@@ -5,7 +5,7 @@ export function repair(creep: Creep, target) {
 
 }
 
-const golHtx = 1 / 2;
+const golHtx = 3 / 4;
 
 export function checkRepairTask() {
   const hitsDanger = checkAllCHits();

@@ -6,7 +6,7 @@ const task_1 = require("./task");
 function repair(creep, target) {
 }
 exports.repair = repair;
-const golHtx = 1 / 2;
+const golHtx = 3 / 4;
 function checkRepairTask() {
     const hitsDanger = (0, checkConstructor_1.checkAllCHits)();
     if (hitsDanger.length) {
