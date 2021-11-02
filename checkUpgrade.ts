@@ -1,8 +1,10 @@
-import { room } from './source';
+import { room } from './room';
 import TaskList, { TaskAction } from './task';
 
 export function checkUpgrade() {
-    if (!TaskList.list.length) {
+    const list = TaskList.list.filter(task => task.action !== TaskAction.harvest);
+    // todo 非采集任务为空时
+    if (!list.length) {
         TaskList.addTask({
             action: TaskAction.upgrade,
             targetId: room.controller.id,

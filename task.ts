@@ -33,7 +33,6 @@ class TaskMemory {
         this.list = this.list.filter(task => {
             const result = task.couldCancel();
             return !result;
-            
         })
     }
 }

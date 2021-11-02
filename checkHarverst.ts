@@ -1,4 +1,4 @@
-import { room } from './source';
+import { room } from './room';
 import TaskList, { TaskAction } from './task';
 
 export function checkHarverstTask() {
@@ -10,6 +10,13 @@ export function checkHarverstTask() {
           action: TaskAction.harvest,
           targetId: source.id,
           couldCancel: () => {
+            if (source?.energy) {
+                const container = source.pos.findClosestByRange(FIND_STRUCTURES, {
+                    filter: stru => stru.structureType === STRUCTURE_CONTAINER
+                }) as unknown as StructureContainer;
+                console.log('container.store.energy === container.store.getCapacity()', container.store.energy, container.store.getCapacity())
+                return !container || container.store.energy === container.store.getCapacity();
+            }
             return !source || !source.energy;
           },
         });

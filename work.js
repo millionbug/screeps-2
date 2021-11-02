@@ -1,19 +1,29 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.harverstWork = exports.harverst = exports.repairWork = exports.repair = exports.buildWork = exports.build = exports.upGraderWork = exports.upGrader = exports.work = void 0;
+exports.harverstWork = exports.harverst = exports.repairWork = exports.repair = exports.buildWork = exports.build = exports.upGraderWork = exports.upGrader = exports.work = exports.getEnerge = void 0;
 const task_1 = require("./task");
 const source_1 = require("./source");
+const room_1 = require("./room");
+function getEnerge(creep, target) {
+    if (target.structureType) {
+        return creep.withdraw(target, RESOURCE_ENERGY);
+    }
+    else {
+        return creep.harvest(target);
+    }
+}
+exports.getEnerge = getEnerge;
 function work(creep, workFn) {
     const source = source_1.default.findSourceAble(creep);
     source_1.default.markCreep(creep, source.id);
     creep.say(creep.store.energy.toString());
     creep.say(creep.memory.workStatus);
-    if (creep.store.energy == 0 && creep.harvest(source) == ERR_NOT_IN_RANGE) {
+    if (creep.store.energy == 0 && getEnerge(creep, source) == ERR_NOT_IN_RANGE) {
         creep.moveTo(source);
         creep.memory.workStatus = task_1.WorkingStatus.harvesting;
     }
     else if (creep.memory.workStatus === task_1.WorkingStatus.harvesting && creep.store.energy < creep.store.getCapacity()) {
-        const result = creep.harvest(source);
+        const result = getEnerge(creep, source);
         creep.say(result.toString());
     }
     else {
@@ -70,7 +80,7 @@ function buildWork(builder, buildTask) {
 exports.buildWork = buildWork;
 function repair(repairer, repairTask) {
     return () => {
-        const target = source_1.room.find(FIND_STRUCTURES).filter(stru => stru.id === repairTask.targetId)[0];
+        const target = room_1.room.find(FIND_STRUCTURES).filter(stru => stru.id === repairTask.targetId)[0];
         const result = repairer.repair(target);
         repairer.say(result.toString());
         if (result == ERR_NOT_IN_RANGE) {
@@ -94,16 +104,15 @@ function repairWork(repairer, repairTask) {
 }
 exports.repairWork = repairWork;
 function harverst(harverster, harverstTask) {
-    const source = source_1.room.find(FIND_SOURCES).find(sou => sou.id === harverstTask.targetId);
-    const container = source_1.room.lookAt(harverster.pos).find(item => { var _a; return ((_a = item.structure) === null || _a === void 0 ? void 0 : _a.structureType) === STRUCTURE_CONTAINER; });
-    if (container) {
+    const source = room_1.room.find(FIND_SOURCES).find(sou => sou.id === harverstTask.targetId);
+    const container = source.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: stru => stru.structureType === STRUCTURE_CONTAINER
+    });
+    if (harverster.pos.isEqualTo(container)) {
         harverster.harvest(source);
     }
     else {
-        const { x, y } = source.pos;
-        // 找到最近的一个 container
-        const container = source_1.room.lookForAtArea(LOOK_STRUCTURES, x - 1, y - 1, x + 1, y + 1, true).find(item => item.structure.structureType === STRUCTURE_CONTAINER);
-        harverster.moveTo(container.structure);
+        const result = harverster.moveTo(container);
     }
 }
 exports.harverst = harverst;

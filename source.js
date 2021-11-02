@@ -1,8 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sourceMap = exports.room = void 0;
-exports.room = Object.values(Game.rooms)[0];
-exports.sourceMap = Object.values(Game.rooms)[0].find(FIND_SOURCES).map(source => {
+exports.SourceMap = exports.getSourceTarget = exports.sources = void 0;
+const utils_1 = require("utils");
+const room_1 = require("./room");
+exports.sources = room_1.room.find(FIND_SOURCES);
+function getSourceTarget(id) {
+    const containers = room_1.room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER);
+    return exports.sources.find(s => s.id === id) || containers.find(con => con.id === id);
+}
+exports.getSourceTarget = getSourceTarget;
+exports.SourceMap = Object.values(Game.rooms)[0].find(FIND_SOURCES).map(source => {
     return {
         id: source.id,
         maxSeat: 3,
@@ -15,7 +22,7 @@ class sourceTable {
         this.containerMap = [];
     }
     sourceCheck() {
-        const containers = exports.room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER);
+        const containers = room_1.room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER);
         containers.forEach(con => {
             if (!this[con.id]) {
                 this[con.id] = [];
@@ -32,7 +39,7 @@ class sourceTable {
         this[sourceId].push(creep.name);
     }
     checkCreepActive() {
-        exports.sourceMap.concat(this.containerMap).forEach(sMap => {
+        exports.SourceMap.concat(this.containerMap).forEach(sMap => {
             const creepList = (this[sMap.id] || []);
             if (creepList.length) {
                 this[sMap.id] = creepList.filter(creep => { var _a; return (_a = Game.creeps[creep]) === null || _a === void 0 ? void 0 : _a.id; });
@@ -40,38 +47,46 @@ class sourceTable {
         });
     }
     findSourceAble(creep) {
-        // let energySource: EnergySource[];
-        // if (creep.memory.action === TaskAction.harvest) {
-        // }
-        const sources = creep.room.find(FIND_SOURCES);
-        const high = exports.sourceMap.find(file => {
+        this.containerMap = (0, utils_1.findStructureByType)(STRUCTURE_CONTAINER).map(container => {
+            return {
+                id: container.id,
+                maxSeat: 5,
+                type: 'container'
+            };
+        });
+        const sourceMap = this.containerMap.concat(exports.SourceMap).map(file => {
             if (!this[file.id]) {
                 this[file.id] = [];
             }
-            return this[file.id].includes(creep.name) && sources.find(s => s.id === file.id).energy > 0;
+            return getSourceTarget(file.id);
+        });
+        const high = sourceMap.find(sou => {
+            if (this[sou.id].includes(creep.name)) {
+                return sou.energy || sou.store.energy;
+            }
         });
         if (high) {
-            return sources.find(s => s.id === high.id);
+            return high;
         }
-        const middle = exports.sourceMap.find(sourceFile => {
+        const middle = this.containerMap.concat(exports.SourceMap).find(sourceFile => {
             var _a;
             const id = sourceFile.id;
-            const sIn = sources.find(s => s.id === id);
             const seat = (((_a = this[id]) === null || _a === void 0 ? void 0 : _a.length) || 0) < sourceFile.maxSeat;
             if (seat) {
-                return sIn.energy > 0;
+                const sou = getSourceTarget(id);
+                return sou.energy || sou.store.energy;
             }
         });
         if (middle) {
-            return sources.find(s => s.id === middle.id);
+            return getSourceTarget(middle.id);
         }
-        return sources[0];
+        return exports.sources[0];
     }
     findSourceWithCreepType(creep) {
         if (creep.memory.action === TaskAction.harvest) {
             return this.findSourceAble(creep);
         }
-        const containers = exports.room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER);
+        const containers = room_1.room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER);
         if (containers.length) {
             containers.find(con => {
             });

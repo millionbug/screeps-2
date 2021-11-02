@@ -1,7 +1,7 @@
 import TaskList, { TaskAction, WorkingStatus } from './task';
 import CreepsList from './creepsList';
 import { findStructureByType } from './utils';
-import { room } from './source';
+import { room } from './room';
 
 let index = 0;
 

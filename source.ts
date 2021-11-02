@@ -1,12 +1,20 @@
+import { HighlightSpanKind } from "typescript";
+import { findStructureByType } from "utils";
+import { room } from './room';
 export interface EnergySource {
     id: string;
     maxSeat: number;
     type: 'source' | 'container'
 }
 
-export const room = Object.values(Game.rooms)[0];
+export const sources = room.find(FIND_SOURCES);
 
-export const sourceMap: EnergySource[] = Object.values(Game.rooms)[0].find(FIND_SOURCES).map(source => {
+export function getSourceTarget(id: string): Source | StructureContainer {
+    const containers = room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER) as unknown as StructureContainer[];
+    return sources.find(s => s.id === id) || containers.find(con => con.id === id);
+}
+
+export const SourceMap: EnergySource[] = Object.values(Game.rooms)[0].find(FIND_SOURCES).map(source => {
     return {
         id: source.id,
         maxSeat: 3,
@@ -41,7 +49,7 @@ class sourceTable {
     }
 
     checkCreepActive() {
-        sourceMap.concat(this.containerMap).forEach(sMap => {
+        SourceMap.concat(this.containerMap).forEach(sMap => {
             const creepList = (this[sMap.id] || []) as string[];
             if (creepList.length) {
                 this[sMap.id] = creepList.filter(creep => Game.creeps[creep]?.id);
@@ -49,43 +57,50 @@ class sourceTable {
         })
     }
 
-    findSourceAble(creep: Creep): Source {
+    findSourceAble(creep: Creep): Source | StructureContainer {
 
-        // let energySource: EnergySource[];
+        this.containerMap = findStructureByType(STRUCTURE_CONTAINER).map(container => {
+            return {
+                id: container.id,
+                maxSeat: 5,
+                type: 'container'
+            }
+        });
 
-        // if (creep.memory.action === TaskAction.harvest) {
-
-        // }
-
-        const sources = creep.room.find(FIND_SOURCES);
-        const high = sourceMap.find(file => {
+        const sourceMap = this.containerMap.concat(SourceMap).map(file => {
             if (!this[file.id]) {
                 this[file.id] = [];
             }
-            return this[file.id].includes(creep.name) && sources.find(s => s.id === file.id).energy > 0;
+            return getSourceTarget(file.id);
+        });
+
+        const high = sourceMap.find(sou => {
+            if (this[sou.id].includes(creep.name)) {
+                return (sou as Source).energy || (sou as StructureContainer).store.energy;
+            }
         });
         if (high) {
-            return sources.find(s => s.id === high.id);
+            return high;
         }
 
-        const middle = sourceMap.find(sourceFile => {
+        const middle = this.containerMap.concat(SourceMap).find(sourceFile => {
             const id = sourceFile.id;
-            const sIn = sources.find(s => s.id === id);
 
             const seat = (this[id]?.length || 0) < sourceFile.maxSeat;
             if (seat) {
-                return sIn.energy > 0;
+                const sou = getSourceTarget(id);
+                return (sou as Source).energy || (sou as StructureContainer).store.energy;
             }
         });
 
         if (middle) {
-            return sources.find(s => s.id === middle.id);
+            return getSourceTarget(middle.id);
         }
 
         return sources[0];
     }
 
-    findSourceWithCreepType(creep: Creep): Source {
+    findSourceWithCreepType(creep: Creep): Source | StructureContainer {
 
         if (creep.memory.action === TaskAction.harvest) {
             return this.findSourceAble(creep);

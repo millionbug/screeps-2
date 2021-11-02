@@ -4,7 +4,8 @@ import { checkUpgrade } from './checkUpgrade';
 import { goToWork } from './goToWork';
 import { createCreeps } from './createCreeps';
 import TaskList from './task';
-import { updateCreepsList } from 'creepsList';
+import { updateCreepsList } from './creepsList';
+import { checkHarverstTask } from './checkHarverst';
 
 export function loop() {
 
@@ -13,6 +14,7 @@ export function loop() {
 
     TaskList.checkList();
 
+    checkHarverstTask();
     checkRepairTask();
     checkBuildTask();
     checkUpgrade();

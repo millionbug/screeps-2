@@ -49,6 +49,7 @@ export function updateCreepsList() {
     ListInstance.repairers = repairers;
     ListInstance.builders = builders;
     ListInstance.upGraders = upGraders;
+    ListInstance.harversters = harversters;
 }
 
 export default ListInstance;

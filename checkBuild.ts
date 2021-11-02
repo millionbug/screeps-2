@@ -1,4 +1,4 @@
-import { room } from './source';
+import { room } from './room';
 import TaskList, { TaskAction } from './task';
 
 export function checkBuildTask() {

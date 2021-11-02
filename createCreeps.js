@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createCreeps = void 0;
 const task_1 = require("./task");
 const creepsList_1 = require("./creepsList");
-const source_1 = require("./source");
+const room_1 = require("./room");
 let index = 0;
 function Create(actionType, createOptions) {
-    const spawn = source_1.room.find(FIND_MY_SPAWNS)[0];
+    const spawn = room_1.room.find(FIND_MY_SPAWNS)[0];
     const name = (index++).toString();
     const body = (createOptions === null || createOptions === void 0 ? void 0 : createOptions.body) || [WORK, MOVE, CARRY];
     let result = spawn && spawn.spawnCreep(body, name, { memory: {

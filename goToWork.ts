@@ -42,7 +42,6 @@ export function goToWork() {
     const tasks = [repairTask, buildTask, upGradeTask];
     const index = tasks.findIndex(Boolean);
     if (notWorkCreeps.length) {
-        // console.log(tasks[index], index, 'index')
         notWorkCreeps.forEach(creep => {
             methods[index](creep, tasks[index]);
         })
@@ -52,14 +51,17 @@ export function goToWork() {
     if (harverstTasks) {
         harverstTasks.forEach(task => {
             if (task.currentWorker && Game.creeps[task.currentWorker.name]) {
-                harverstWork(task.currentWorker, task);
+                harverstWork(Game.creeps[task.currentWorker.name], task);
             } else {
                 const har = harversters.find(haster => {
-                    return harverstTasks.every(t => {
+                    const result =  harverstTasks.every(t => {
                         return t.currentWorker !== haster;
                     })
+                    return result;
                 });
-                harverstWork(har, task);
+                if (har) {
+                    harverstWork(har, task);
+                }
             }
         })
     }

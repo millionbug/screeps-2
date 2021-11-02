@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkBuildTask = void 0;
-const source_1 = require("./source");
+const room_1 = require("./room");
 const task_1 = require("./task");
 function checkBuildTask() {
-    const buildList = source_1.room.find(FIND_CONSTRUCTION_SITES);
+    const buildList = room_1.room.find(FIND_CONSTRUCTION_SITES);
     if (buildList.length) {
         const target = buildList[0];
         task_1.default.addTask({
