@@ -10,7 +10,7 @@ export function isDanger(structure: Structure<StructureConstant>, gol?: number) 
 }
 
 export function checkAllCHits() {
-    const structures = findStructureByType(STRUCTURE_ROAD);
+    const structures = findStructureByType(STRUCTURE_ROAD).concat(findStructureByType(STRUCTURE_CONTAINER));
     return Object.keys(structures).map((key, index) => {
         const structure = structures[key];
         const currPercent = isDanger(structure)

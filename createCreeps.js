@@ -34,6 +34,7 @@ function createCreeps() {
     if (upGraders.length < 2) {
         Create(task_1.TaskAction.upgrade);
     }
+    console.log('harverstTasks', harverstTasks.length);
     if (harverstTasks.length > harversters.length) {
         createHaverster();
     }

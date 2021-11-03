@@ -1,14 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SourceMap = exports.getSourceTarget = exports.sources = void 0;
+exports.sourceGlobal = exports.SourceMap = void 0;
 const utils_1 = require("utils");
 const room_1 = require("./room");
-exports.sources = room_1.room.find(FIND_SOURCES);
-function getSourceTarget(id) {
-    const containers = room_1.room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER);
-    return exports.sources.find(s => s.id === id) || containers.find(con => con.id === id);
-}
-exports.getSourceTarget = getSourceTarget;
 exports.SourceMap = Object.values(Game.rooms)[0].find(FIND_SOURCES).map(source => {
     return {
         id: source.id,
@@ -16,6 +10,20 @@ exports.SourceMap = Object.values(Game.rooms)[0].find(FIND_SOURCES).map(source =
         type: 'source'
     };
 });
+class SourceGlobal {
+    constructor() {
+        this.updateSourceList();
+    }
+    updateSourceList() {
+        this.sourcesList = room_1.room.find(FIND_SOURCES);
+    }
+    getSourceTarget(id) {
+        const containers = room_1.room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER);
+        return this.sourcesList.find(s => s.id === id) || containers.find(con => con.id === id);
+    }
+}
+;
+exports.sourceGlobal = new SourceGlobal();
 class sourceTable {
     constructor() {
         this.harvesterMap = {};
@@ -58,7 +66,7 @@ class sourceTable {
             if (!this[file.id]) {
                 this[file.id] = [];
             }
-            return getSourceTarget(file.id);
+            return exports.sourceGlobal.getSourceTarget(file.id);
         });
         const high = sourceMap.find(sou => {
             if (this[sou.id].includes(creep.name)) {
@@ -73,14 +81,14 @@ class sourceTable {
             const id = sourceFile.id;
             const seat = (((_a = this[id]) === null || _a === void 0 ? void 0 : _a.length) || 0) < sourceFile.maxSeat;
             if (seat) {
-                const sou = getSourceTarget(id);
+                const sou = exports.sourceGlobal.getSourceTarget(id);
                 return sou.energy || sou.store.energy;
             }
         });
         if (middle) {
-            return getSourceTarget(middle.id);
+            return exports.sourceGlobal.getSourceTarget(middle.id);
         }
-        return exports.sources[0];
+        return exports.sourceGlobal.sourcesList[0];
     }
     findSourceWithCreepType(creep) {
         if (creep.memory.action === TaskAction.harvest) {

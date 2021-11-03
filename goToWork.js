@@ -45,13 +45,14 @@ function goToWork() {
     }
     if (harverstTasks) {
         harverstTasks.forEach(task => {
-            if (task.currentWorker && Game.creeps[task.currentWorker.name]) {
-                (0, work_1.harverstWork)(Game.creeps[task.currentWorker.name], task);
+            if (task.currentWorkerName && Game.creeps[task.currentWorkerName]) {
+                (0, work_1.harverstWork)(Game.creeps[task.currentWorkerName], task);
             }
             else {
+                delete task.currentWorkerName;
                 const har = harversters.find(haster => {
                     const result = harverstTasks.every(t => {
-                        return t.currentWorker !== haster;
+                        return t.currentWorkerName !== haster.name;
                     });
                     return result;
                 });

@@ -11,7 +11,7 @@ function isDanger(structure, gol) {
 }
 exports.isDanger = isDanger;
 function checkAllCHits() {
-    const structures = (0, utils_1.findStructureByType)(STRUCTURE_ROAD);
+    const structures = (0, utils_1.findStructureByType)(STRUCTURE_ROAD).concat((0, utils_1.findStructureByType)(STRUCTURE_CONTAINER));
     return Object.keys(structures).map((key, index) => {
         const structure = structures[key];
         const currPercent = isDanger(structure);

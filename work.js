@@ -117,7 +117,7 @@ function harverst(harverster, harverstTask) {
 }
 exports.harverst = harverst;
 function harverstWork(creep, harverstTask) {
-    harverstTask.currentWorker = creep;
+    harverstTask.currentWorkerName = creep.name;
     harverst(creep, harverstTask);
 }
 exports.harverstWork = harverstWork;

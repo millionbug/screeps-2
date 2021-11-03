@@ -1,5 +1,5 @@
 import TaskList, { Task, TaskAction, WorkingStatus } from './task';
-import sourceTable, { sources } from './source';
+import sourceTable, { sourceGlobal } from './source';
 import { room } from './room';
 
 export function getEnerge(creep: Creep, target: Source | StructureContainer) {
@@ -105,6 +105,6 @@ export function harverst(harverster: Creep, harverstTask: Task) {
 }
 
 export function harverstWork(creep: Creep, harverstTask: Task) {
-    harverstTask.currentWorker = creep;
+    harverstTask.currentWorkerName = creep.name;
     harverst(creep, harverstTask);
 }

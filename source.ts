@@ -7,13 +7,6 @@ export interface EnergySource {
     type: 'source' | 'container'
 }
 
-export const sources = room.find(FIND_SOURCES);
-
-export function getSourceTarget(id: string): Source | StructureContainer {
-    const containers = room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER) as unknown as StructureContainer[];
-    return sources.find(s => s.id === id) || containers.find(con => con.id === id);
-}
-
 export const SourceMap: EnergySource[] = Object.values(Game.rooms)[0].find(FIND_SOURCES).map(source => {
     return {
         id: source.id,
@@ -21,6 +14,25 @@ export const SourceMap: EnergySource[] = Object.values(Game.rooms)[0].find(FIND_
         type: 'source'
     }
 });
+
+class SourceGlobal {
+    sourcesList: Source[];
+
+    constructor() {
+        this.updateSourceList();
+    }
+
+    updateSourceList() {
+        this.sourcesList = room.find(FIND_SOURCES);
+    }
+
+    getSourceTarget(id: string): Source | StructureContainer {
+        const containers = room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER) as unknown as StructureContainer[];
+        return this.sourcesList.find(s => s.id === id) || containers.find(con => con.id === id);
+    }
+};
+
+export const sourceGlobal = new SourceGlobal();
 
 
 class sourceTable {
@@ -71,7 +83,7 @@ class sourceTable {
             if (!this[file.id]) {
                 this[file.id] = [];
             }
-            return getSourceTarget(file.id);
+            return sourceGlobal.getSourceTarget(file.id);
         });
 
         const high = sourceMap.find(sou => {
@@ -88,16 +100,16 @@ class sourceTable {
 
             const seat = (this[id]?.length || 0) < sourceFile.maxSeat;
             if (seat) {
-                const sou = getSourceTarget(id);
+                const sou = sourceGlobal.getSourceTarget(id);
                 return (sou as Source).energy || (sou as StructureContainer).store.energy;
             }
         });
 
         if (middle) {
-            return getSourceTarget(middle.id);
+            return sourceGlobal.getSourceTarget(middle.id);
         }
 
-        return sources[0];
+        return sourceGlobal.sourcesList[0];
     }
 
     findSourceWithCreepType(creep: Creep): Source | StructureContainer {
