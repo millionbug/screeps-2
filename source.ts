@@ -1,5 +1,4 @@
-import { HighlightSpanKind } from "typescript";
-import { findStructureByType } from "utils";
+import { structureGlobal } from './structure';
 import { room } from './room';
 export interface EnergySource {
     id: string;
@@ -27,7 +26,7 @@ class SourceGlobal {
     }
 
     getSourceTarget(id: string): Source | StructureContainer {
-        const containers = room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER) as unknown as StructureContainer[];
+        const containers = structureGlobal.findStructureByType(STRUCTURE_CONTAINER) as StructureContainer[];
         return this.sourcesList.find(s => s.id === id) || containers.find(con => con.id === id);
     }
 };
@@ -42,7 +41,7 @@ class sourceTable {
     containerMap: EnergySource[] = [];
 
     sourceCheck() {
-        const containers = room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER) as unknown as StructureContainer[];
+        const containers = structureGlobal.findStructureByType(STRUCTURE_CONTAINER) as StructureContainer[];
         containers.forEach(con => {
             if (!this[con.id]) {
                 this[con.id] = [];
@@ -71,7 +70,7 @@ class sourceTable {
 
     findSourceAble(creep: Creep): Source | StructureContainer {
 
-        this.containerMap = findStructureByType(STRUCTURE_CONTAINER).map(container => {
+        this.containerMap = structureGlobal.findStructureByType(STRUCTURE_CONTAINER).map(container => {
             return {
                 id: container.id,
                 maxSeat: 5,
@@ -118,7 +117,7 @@ class sourceTable {
             return this.findSourceAble(creep);
         }
 
-        const containers = room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER) as unknown as StructureContainer[];
+        const containers = structureGlobal.findStructureByType(STRUCTURE_CONTAINER) as StructureContainer[];
         if (containers.length) {
             containers.find(con => {
 

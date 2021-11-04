@@ -5,11 +5,12 @@ export function checkBuildTask() {
     const buildList = room.find(FIND_CONSTRUCTION_SITES);
     if (buildList.length) {
         const target = buildList[0];
+        const id = target.id;
         TaskList.addTask({
             action: TaskAction.build,
-            targetId: target.id,
+            targetId: id,
             couldCancel: () => {
-                const currentT = Game.constructionSites[target.id];
+                const currentT = Game.constructionSites[id];
                 return !currentT || (currentT.progressTotal === currentT.progress);
             }
         })

@@ -1,6 +1,5 @@
 import TaskList, { TaskAction, WorkingStatus } from './task';
 import CreepsList from './creepsList';
-import { findStructureByType } from './utils';
 import { room } from './room';
 
 let index = 0;
@@ -36,7 +35,7 @@ export function createCreeps() {
     if (builders.length < 4 && buildTask) {
         Create(TaskAction.build);
     }
-    if (upGraders.length < 2) {
+    if (upGraders.length < 8) {
         Create(TaskAction.upgrade);
     }
     if (harverstTasks.length > harversters.length) {

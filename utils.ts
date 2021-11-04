@@ -1,5 +1,10 @@
-import { room } from "./room";
+import { sourceGlobal } from './source';
+import { structureGlobal } from './structure';
+import { updateCreepsList } from "./creepsList";
 
-export function findStructureByType(structureType: BuildableStructureConstant, options?: FilterOptions<FIND_STRUCTURES>) {
-    return room.find(FIND_STRUCTURES, options).filter(stru => stru.structureType === structureType);
+export function updateGlobalAtLoop() {
+    sourceGlobal.updateSourceList();
+    structureGlobal.updateStructuresList();
+
+    updateCreepsList();
 }

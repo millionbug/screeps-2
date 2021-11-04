@@ -1,6 +1,7 @@
 import TaskList, { Task, TaskAction, WorkingStatus } from './task';
 import sourceTable, { sourceGlobal } from './source';
 import { room } from './room';
+import { structureGlobal } from 'structure';
 
 export function getEnerge(creep: Creep, target: Source | StructureContainer) {
     if ((target as StructureContainer).structureType) {
@@ -72,7 +73,7 @@ export function buildWork(builder: Creep, buildTask: Task) {
 
 export function repair(repairer: Creep, repairTask: Task) {
     return () => {
-        const target = room.find(FIND_STRUCTURES).filter(stru => stru.id === repairTask.targetId)[0];
+        const target = structureGlobal.findStructureById(repairTask.targetId);
         const result = repairer.repair(target);
         repairer.say(result.toString());
         if(result == ERR_NOT_IN_RANGE) {
