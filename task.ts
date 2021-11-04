@@ -3,7 +3,8 @@ export enum TaskAction {
     create = 'create',
     harvest = 'harvest',
     build = 'build',
-    upgrade = 'upgrade'
+    upgrade = 'upgrade',
+    transfer = 'transfer'
 }
 
 export enum WorkingStatus {
@@ -12,7 +13,8 @@ export enum WorkingStatus {
     harvesting = 'harvesting',
     building = 'building',
     upgradeing = 'upgradeing',
-    relaxing = 'relaxing'
+    relaxing = 'relaxing',
+    transfering = 'transfering'
 }
 
 export interface Task {

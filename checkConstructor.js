@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkAllCHits = exports.isDanger = void 0;
-const utils_1 = require("utils");
+exports.checkAllEnergy = exports.checkAllCHits = exports.isFull = exports.isDanger = void 0;
+const structure_1 = require("./structure");
 const DangerHits = 1 / 3;
 function isDanger(structure, gol) {
     const maxHits = structure.hitsMax;
@@ -10,8 +10,14 @@ function isDanger(structure, gol) {
     return currPercent < (gol || DangerHits) ? currPercent : false;
 }
 exports.isDanger = isDanger;
+function isFull(structure) {
+    const free = structure.store.getFreeCapacity(RESOURCE_ENERGY);
+    return free;
+}
+exports.isFull = isFull;
 function checkAllCHits() {
-    const structures = (0, utils_1.findStructureByType)(STRUCTURE_ROAD).concat((0, utils_1.findStructureByType)(STRUCTURE_CONTAINER));
+    const structures = structure_1.structureGlobal.findStructureByType(STRUCTURE_ROAD)
+        .concat(structure_1.structureGlobal.findStructureByType(STRUCTURE_CONTAINER));
     return Object.keys(structures).map((key, index) => {
         const structure = structures[key];
         const currPercent = isDanger(structure);
@@ -24,3 +30,19 @@ function checkAllCHits() {
     }).filter(Boolean);
 }
 exports.checkAllCHits = checkAllCHits;
+function checkAllEnergy(structureTypes) {
+    const structures = structureTypes.reduce((pre, curr) => {
+        return pre.concat(structure_1.structureGlobal.findStructureByType(curr));
+    }, []);
+    return structures.map((structure) => {
+        // @ts-ignore
+        const free = isFull(structure);
+        if (free) {
+            return {
+                structure,
+                free
+            };
+        }
+    }).filter(Boolean);
+}
+exports.checkAllEnergy = checkAllEnergy;

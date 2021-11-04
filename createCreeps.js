@@ -20,19 +20,24 @@ function createHaverster() {
     });
 }
 function createCreeps() {
-    const { repairers, builders, upGraders, harversters } = creepsList_1.default;
+    const { repairers, builders, upGraders, harversters, transfers } = creepsList_1.default;
     const repairTask = task_1.default.list.find(task => task.action === task_1.TaskAction.repair);
     const buildTask = task_1.default.list.find(task => task.action === task_1.TaskAction.build);
     const upGradeTask = task_1.default.list.find(task => task.action === task_1.TaskAction.upgrade);
     const harverstTasks = task_1.default.list.filter(task => task.action === task_1.TaskAction.harvest);
+    const transferTask = task_1.default.list.find(task => task.action === task_1.TaskAction.transfer);
     if (repairers.length < 2 && repairTask) {
         Create(task_1.TaskAction.repair);
     }
     if (builders.length < 4 && buildTask) {
         Create(task_1.TaskAction.build);
     }
-    if (upGraders.length < 2) {
+    if (upGraders.length < 8) {
         Create(task_1.TaskAction.upgrade);
+    }
+    // transfer 任务例外，否则永远停不下来
+    if (transferTask && transfers.length < 6) {
+        Create(task_1.TaskAction.transfer);
     }
     if (harverstTasks.length > harversters.length) {
         createHaverster();

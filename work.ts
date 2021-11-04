@@ -83,7 +83,6 @@ export function repair(repairer: Creep, repairTask: Task) {
                 repairer.memory.workStatus = WorkingStatus.harvesting;
             };
         } else {
-            repairer.repair(target);
             repairer.memory.workStatus = WorkingStatus.repairing;
         }
     }
@@ -108,4 +107,25 @@ export function harverst(harverster: Creep, harverstTask: Task) {
 export function harverstWork(creep: Creep, harverstTask: Task) {
     harverstTask.currentWorkerName = creep.name;
     harverst(creep, harverstTask);
+}
+
+export function trans(creep: Creep, transferTask: Task) {
+    return () => {
+        const target = structureGlobal.findStructureById(transferTask.targetId);
+        const result = creep.transfer(target, RESOURCE_ENERGY);
+        creep.say(result.toString());
+        if(result == ERR_NOT_IN_RANGE) {
+            creep.moveTo(target);
+        } else if (creep.memory.workStatus === WorkingStatus.transfering) {
+            if (creep.transfer(target, RESOURCE_ENERGY) === ERR_NOT_ENOUGH_ENERGY) {
+                creep.memory.workStatus = WorkingStatus.harvesting;
+            };
+        } else {
+            creep.memory.workStatus = WorkingStatus.transfering;
+        }
+    }
+}
+
+export function transferWrok(creep: Creep, transferTask: Task) {
+    work(creep, trans(creep, transferTask));
 }

@@ -5,6 +5,7 @@ import { goToWork } from './goToWork';
 import { createCreeps } from './createCreeps';
 import TaskList from './task';
 import { checkHarverstTask } from './checkHarverst';
+import { checkTransferTask } from './checkExtension';
 import { updateGlobalAtLoop } from './utils';
 
 export function loop() {
@@ -16,6 +17,7 @@ export function loop() {
     checkHarverstTask();
     checkRepairTask();
     checkBuildTask();
+    checkTransferTask();
     checkUpgrade();
 
     createCreeps();

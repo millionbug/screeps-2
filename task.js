@@ -8,6 +8,7 @@ var TaskAction;
     TaskAction["harvest"] = "harvest";
     TaskAction["build"] = "build";
     TaskAction["upgrade"] = "upgrade";
+    TaskAction["transfer"] = "transfer";
 })(TaskAction = exports.TaskAction || (exports.TaskAction = {}));
 var WorkingStatus;
 (function (WorkingStatus) {
@@ -17,6 +18,7 @@ var WorkingStatus;
     WorkingStatus["building"] = "building";
     WorkingStatus["upgradeing"] = "upgradeing";
     WorkingStatus["relaxing"] = "relaxing";
+    WorkingStatus["transfering"] = "transfering";
 })(WorkingStatus = exports.WorkingStatus || (exports.WorkingStatus = {}));
 class TaskMemory {
     constructor() {

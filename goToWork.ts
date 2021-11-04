@@ -1,15 +1,16 @@
 import CreepsList from './creepsList';
 import TaskList, { TaskAction, WorkingStatus } from './task';
-import { upGraderWork, buildWork, repairWork, harverstWork } from './work';
+import { upGraderWork, buildWork, repairWork, harverstWork, transferWrok } from './work';
 
 
 export function goToWork() {
-    const { repairers, builders, upGraders, harversters } = CreepsList;
+    const { repairers, builders, upGraders, harversters, transfers } = CreepsList;
     
     const repairTask = TaskList.list.find(task => task.action === TaskAction.repair);
     const buildTask = TaskList.list.find(task => task.action === TaskAction.build);
     const upGradeTask = TaskList.list.find(task => task.action === TaskAction.upgrade);
     const harverstTasks = TaskList.list.filter(task => task.action === TaskAction.harvest);
+    const transferTask = TaskList.list.find(task => task.action === TaskAction.transfer);
 
     let notWorkCreeps: Creep[] = []
 
@@ -38,15 +39,22 @@ export function goToWork() {
         notWorkCreeps = notWorkCreeps.concat(builders);
     }
 
-    const methods = [repairWork, buildWork, upGraderWork];
-    const tasks = [repairTask, buildTask, upGradeTask];
+    if (transferTask && false) {
+        transfers.forEach(creep => {
+            transferWrok(creep, transferTask);
+        });
+    } else {
+        notWorkCreeps = notWorkCreeps.concat(transfers);
+    }
+
+    const methods = [repairWork, buildWork, upGraderWork, transferWrok ];
+    const tasks = [repairTask, buildTask, upGradeTask, transferTask];
     const index = tasks.findIndex(Boolean);
     if (notWorkCreeps.length) {
         notWorkCreeps.forEach(creep => {
             methods[index](creep, tasks[index]);
         })
     }
-
 
     if (harverstTasks) {
         harverstTasks.forEach(task => {

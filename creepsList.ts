@@ -5,6 +5,7 @@ export class CreepsList {
     builders: Creep[] = [];
     upGraders: Creep[] = [];
     harversters: Creep[] = [];
+    transfers: Creep[] = [];
 }
 
 const ListInstance = new CreepsList();
@@ -21,10 +22,11 @@ export function checkActive() {
 
 export function updateCreepsList() {
     const creeps = Object.values(Game.creeps);
-    const repairers: Creep[] = [];
-    const builders: Creep[] = [];
-    const upGraders: Creep[] = [];
-    const harversters: Creep[] = [];
+    ListInstance.repairers = [];
+    ListInstance.builders = [];
+    ListInstance.upGraders = [];
+    ListInstance.harversters = [];
+    ListInstance.transfers = [];
 
     // 清除已死去的 creep 的 memory 信息
     checkActive();
@@ -33,23 +35,21 @@ export function updateCreepsList() {
 
     creeps.forEach((creep) => {
         if (creep.memory.action === TaskAction.repair) {
-            repairers.push(creep);
+            ListInstance.repairers.push(creep);
         }
         if (creep.memory.action === TaskAction.build) {
-            builders.push(creep);
+            ListInstance.builders.push(creep);
         }
         if (creep.memory.action === TaskAction.upgrade) {
-            upGraders.push(creep);
+            ListInstance.upGraders.push(creep);
         }
         if (creep.memory.action === TaskAction.harvest) {
-            harversters.push(creep);
+            ListInstance.harversters.push(creep);
+        }
+        if (creep.memory.action === TaskAction.transfer) {
+            ListInstance.transfers.push(creep);
         }
     });
-
-    ListInstance.repairers = repairers;
-    ListInstance.builders = builders;
-    ListInstance.upGraders = upGraders;
-    ListInstance.harversters = harversters;
 }
 
 export default ListInstance;

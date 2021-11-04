@@ -10,12 +10,13 @@ export function isDanger(structure: Structure<StructureConstant>, gol?: number) 
 }
 
 export function isFull(structure: StructureSpawn | StructureExtension) {
-    const free = structure.store.getFreeCapacity();
+    const free = structure.store.getFreeCapacity(RESOURCE_ENERGY);
     return free;
 }
 
 export function checkAllCHits() {
-    const structures = structureGlobal.findStructureByType(STRUCTURE_ROAD).concat(findStructureByType(STRUCTURE_CONTAINER));
+    const structures = structureGlobal.findStructureByType(STRUCTURE_ROAD)
+    .concat(structureGlobal.findStructureByType(STRUCTURE_CONTAINER));
     return Object.keys(structures).map((key, index) => {
         const structure = structures[key];
         const currPercent = isDanger(structure)
@@ -29,9 +30,9 @@ export function checkAllCHits() {
 }
 
 export function checkAllEnergy(structureTypes: Array<STRUCTURE_EXTENSION | STRUCTURE_SPAWN>) {
-    const structures = structureTypes.flatMap(type => {
-        return structureGlobal.findStructureByType(type);
-    })
+    const structures = structureTypes.reduce((pre, curr) => {
+        return pre.concat(structureGlobal.findStructureByType(curr));
+    }, [])
     return structures.map((structure) => {
         // @ts-ignore
         const free = isFull(structure);

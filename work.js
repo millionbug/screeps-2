@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.harverstWork = exports.harverst = exports.repairWork = exports.repair = exports.buildWork = exports.build = exports.upGraderWork = exports.upGrader = exports.work = exports.getEnerge = void 0;
+exports.transferWrok = exports.trans = exports.harverstWork = exports.harverst = exports.repairWork = exports.repair = exports.buildWork = exports.build = exports.upGraderWork = exports.upGrader = exports.work = exports.getEnerge = void 0;
 const task_1 = require("./task");
 const source_1 = require("./source");
 const room_1 = require("./room");
+const structure_1 = require("structure");
 function getEnerge(creep, target) {
     if (target.structureType) {
         return creep.withdraw(target, RESOURCE_ENERGY);
@@ -80,7 +81,7 @@ function buildWork(builder, buildTask) {
 exports.buildWork = buildWork;
 function repair(repairer, repairTask) {
     return () => {
-        const target = room_1.room.find(FIND_STRUCTURES).filter(stru => stru.id === repairTask.targetId)[0];
+        const target = structure_1.structureGlobal.findStructureById(repairTask.targetId);
         const result = repairer.repair(target);
         repairer.say(result.toString());
         if (result == ERR_NOT_IN_RANGE) {
@@ -93,7 +94,6 @@ function repair(repairer, repairTask) {
             ;
         }
         else {
-            repairer.repair(target);
             repairer.memory.workStatus = task_1.WorkingStatus.repairing;
         }
     };
@@ -121,3 +121,27 @@ function harverstWork(creep, harverstTask) {
     harverst(creep, harverstTask);
 }
 exports.harverstWork = harverstWork;
+function trans(creep, transferTask) {
+    return () => {
+        const target = structure_1.structureGlobal.findStructureById(transferTask.targetId);
+        const result = creep.transfer(target, RESOURCE_ENERGY);
+        creep.say(result.toString());
+        if (result == ERR_NOT_IN_RANGE) {
+            creep.moveTo(target);
+        }
+        else if (creep.memory.workStatus === task_1.WorkingStatus.transfering) {
+            if (creep.transfer(target, RESOURCE_ENERGY) === ERR_NOT_ENOUGH_ENERGY) {
+                creep.memory.workStatus = task_1.WorkingStatus.harvesting;
+            }
+            ;
+        }
+        else {
+            creep.memory.workStatus = task_1.WorkingStatus.transfering;
+        }
+    };
+}
+exports.trans = trans;
+function transferWrok(creep, transferTask) {
+    work(creep, trans(creep, transferTask));
+}
+exports.transferWrok = transferWrok;

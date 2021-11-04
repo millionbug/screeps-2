@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sourceGlobal = exports.SourceMap = void 0;
-const utils_1 = require("utils");
+const structure_1 = require("./structure");
 const room_1 = require("./room");
 exports.SourceMap = Object.values(Game.rooms)[0].find(FIND_SOURCES).map(source => {
     return {
@@ -18,7 +18,7 @@ class SourceGlobal {
         this.sourcesList = room_1.room.find(FIND_SOURCES);
     }
     getSourceTarget(id) {
-        const containers = room_1.room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER);
+        const containers = structure_1.structureGlobal.findStructureByType(STRUCTURE_CONTAINER);
         return this.sourcesList.find(s => s.id === id) || containers.find(con => con.id === id);
     }
 }
@@ -30,7 +30,7 @@ class sourceTable {
         this.containerMap = [];
     }
     sourceCheck() {
-        const containers = room_1.room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER);
+        const containers = structure_1.structureGlobal.findStructureByType(STRUCTURE_CONTAINER);
         containers.forEach(con => {
             if (!this[con.id]) {
                 this[con.id] = [];
@@ -55,7 +55,7 @@ class sourceTable {
         });
     }
     findSourceAble(creep) {
-        this.containerMap = (0, utils_1.findStructureByType)(STRUCTURE_CONTAINER).map(container => {
+        this.containerMap = structure_1.structureGlobal.findStructureByType(STRUCTURE_CONTAINER).map(container => {
             return {
                 id: container.id,
                 maxSeat: 5,
@@ -94,7 +94,7 @@ class sourceTable {
         if (creep.memory.action === TaskAction.harvest) {
             return this.findSourceAble(creep);
         }
-        const containers = room_1.room.find(FIND_STRUCTURES).filter(stru => stru.structureType === STRUCTURE_CONTAINER);
+        const containers = structure_1.structureGlobal.findStructureByType(STRUCTURE_CONTAINER);
         if (containers.length) {
             containers.find(con => {
             });
