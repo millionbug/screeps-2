@@ -36,7 +36,7 @@ function goToWork() {
     else {
         notWorkCreeps = notWorkCreeps.concat(builders);
     }
-    if (transferTask && false) {
+    if (transferTask) {
         transfers.forEach(creep => {
             (0, work_1.transferWrok)(creep, transferTask);
         });
@@ -44,8 +44,8 @@ function goToWork() {
     else {
         notWorkCreeps = notWorkCreeps.concat(transfers);
     }
-    const methods = [work_1.repairWork, work_1.buildWork, work_1.upGraderWork, work_1.transferWrok];
-    const tasks = [repairTask, buildTask, upGradeTask, transferTask];
+    const methods = [work_1.repairWork, work_1.buildWork, work_1.transferWrok, work_1.upGraderWork];
+    const tasks = [repairTask, buildTask, transferTask, upGradeTask];
     const index = tasks.findIndex(Boolean);
     if (notWorkCreeps.length) {
         notWorkCreeps.forEach(creep => {

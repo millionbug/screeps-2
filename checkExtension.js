@@ -11,7 +11,7 @@ exports.repair = repair;
 const golHtx = 3 / 4;
 function checkTransferTask() {
     const freeList = (0, checkConstructor_1.checkAllEnergy)([STRUCTURE_SPAWN, STRUCTURE_EXTENSION]);
-    const { transfers } = creepsList_1.default;
+    const { creepsNumb } = creepsList_1.default;
     if (freeList.length) {
         const first = freeList.sort((struA, struB) => struA.free - struB.free)[0];
         const id = first.structure.id;
@@ -19,7 +19,8 @@ function checkTransferTask() {
         task_1.default.addTask({
             action: task_1.TaskAction.transfer,
             targetId: id,
-            couldCancel: () => !(0, checkConstructor_1.isFull)(structure_1.structureGlobal.findStructureById(id)) || transfers.length > 4,
+            // 总数小于 16 时取消 transfer
+            couldCancel: () => !(0, checkConstructor_1.isFull)(structure_1.structureGlobal.findStructureById(id)) || creepsNumb > 16,
         });
     }
 }

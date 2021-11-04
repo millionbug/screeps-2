@@ -51,6 +51,8 @@ function updateCreepsList() {
             ListInstance.transfers.push(creep);
         }
     });
+    const { repairers, builders, upGraders, harversters, transfers } = ListInstance;
+    ListInstance.creepsNumb = creeps.length;
 }
 exports.updateCreepsList = updateCreepsList;
 exports.default = ListInstance;

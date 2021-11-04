@@ -12,7 +12,7 @@ const golHtx = 3 / 4;
 
 export function checkTransferTask() {
   const freeList = checkAllEnergy([STRUCTURE_SPAWN, STRUCTURE_EXTENSION]);
-  const { transfers } = CreepsList;
+  const { creepsNumb } = CreepsList;
   if (freeList.length) {
     const first = freeList.sort((struA, struB) => struA.free - struB.free)[0];
     const id = first.structure.id;
@@ -20,7 +20,8 @@ export function checkTransferTask() {
     TaskList.addTask({
       action: TaskAction.transfer,
       targetId: id,
-      couldCancel: () => !isFull(structureGlobal.findStructureById(id) as any) || transfers.length > 4,
+    // 总数小于 16 时取消 transfer
+      couldCancel: () => !isFull(structureGlobal.findStructureById(id) as any) || creepsNumb > 16,
     });
   }
 }

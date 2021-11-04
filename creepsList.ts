@@ -1,6 +1,7 @@
 import { TaskAction } from './task';
 import sourceTable from './source';
 export class CreepsList {
+    creepsNumb: number;
     repairers: Creep[] = [];
     builders: Creep[] = [];
     upGraders: Creep[] = [];
@@ -50,6 +51,8 @@ export function updateCreepsList() {
             ListInstance.transfers.push(creep);
         }
     });
+    const { repairers, builders, upGraders, harversters, transfers } = ListInstance;
+    ListInstance.creepsNumb = creeps.length;
 }
 
 export default ListInstance;
