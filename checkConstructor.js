@@ -4,6 +4,9 @@ exports.checkAllEnergy = exports.checkAllCHits = exports.isFull = exports.isDang
 const structure_1 = require("./structure");
 const DangerHits = 1 / 3;
 function isDanger(structure, gol) {
+    if (!structure) {
+        return false;
+    }
     const maxHits = structure.hitsMax;
     const hits = structure.hits;
     const currPercent = hits / maxHits;

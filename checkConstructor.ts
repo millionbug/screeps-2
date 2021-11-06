@@ -3,6 +3,9 @@ import { structureGlobal } from "./structure";
 const DangerHits = 1 / 3;
 
 export function isDanger(structure: Structure<StructureConstant>, gol?: number) {
+    if (!structure) {
+        return false;
+    }
     const maxHits = structure.hitsMax;
     const hits = structure.hits;
     const currPercent = hits / maxHits;

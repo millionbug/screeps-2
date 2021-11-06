@@ -4,7 +4,7 @@ exports.checkBuildTask = void 0;
 const room_1 = require("./room");
 const task_1 = require("./task");
 function checkBuildTask() {
-    const buildList = room_1.room.find(FIND_CONSTRUCTION_SITES);
+    const buildList = room_1.room.instance.find(FIND_CONSTRUCTION_SITES);
     if (buildList.length) {
         const target = buildList[0];
         const id = target.id;

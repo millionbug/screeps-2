@@ -7,7 +7,7 @@ class StructureGlobal {
         this.cacheList = {};
     }
     updateStructuresList() {
-        this.structuresList = room_1.room.find(FIND_STRUCTURES);
+        this.structuresList = room_1.room.instance.find(FIND_STRUCTURES);
         this.cacheList = {};
     }
     findStructureById(id) {

@@ -15,7 +15,7 @@ class SourceGlobal {
         this.updateSourceList();
     }
     updateSourceList() {
-        this.sourcesList = room_1.room.find(FIND_SOURCES);
+        this.sourcesList = room_1.room.instance.find(FIND_SOURCES);
     }
     getSourceTarget(id) {
         const containers = structure_1.structureGlobal.findStructureByType(STRUCTURE_CONTAINER);

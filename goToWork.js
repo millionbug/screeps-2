@@ -44,8 +44,8 @@ function goToWork() {
     else {
         notWorkCreeps = notWorkCreeps.concat(transfers);
     }
-    const methods = [work_1.repairWork, work_1.buildWork, work_1.transferWrok, work_1.upGraderWork];
-    const tasks = [repairTask, buildTask, transferTask, upGradeTask];
+    const methods = [work_1.transferWrok, work_1.repairWork, work_1.buildWork, work_1.upGraderWork];
+    const tasks = [transferTask, repairTask, buildTask, upGradeTask];
     const index = tasks.findIndex(Boolean);
     if (notWorkCreeps.length) {
         notWorkCreeps.forEach(creep => {

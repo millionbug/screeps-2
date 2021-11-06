@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.transferWrok = exports.trans = exports.harverstWork = exports.harverst = exports.repairWork = exports.repair = exports.buildWork = exports.build = exports.upGraderWork = exports.upGrader = exports.work = exports.getEnerge = void 0;
 const task_1 = require("./task");
 const source_1 = require("./source");
-const room_1 = require("./room");
 const structure_1 = require("structure");
 function getEnerge(creep, target) {
     if (target.structureType) {
@@ -104,7 +103,7 @@ function repairWork(repairer, repairTask) {
 }
 exports.repairWork = repairWork;
 function harverst(harverster, harverstTask) {
-    const source = room_1.room.find(FIND_SOURCES).find(sou => sou.id === harverstTask.targetId);
+    const source = harverster.room.find(FIND_SOURCES).find(sou => sou.id === harverstTask.targetId);
     const container = source.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: stru => stru.structureType === STRUCTURE_CONTAINER
     });

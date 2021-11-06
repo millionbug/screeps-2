@@ -1,6 +1,5 @@
 import TaskList, { Task, TaskAction, WorkingStatus } from './task';
 import sourceTable, { sourceGlobal } from './source';
-import { room } from './room';
 import { structureGlobal } from 'structure';
 
 export function getEnerge(creep: Creep, target: Source | StructureContainer) {
@@ -93,7 +92,7 @@ export function repairWork(repairer: Creep, repairTask: Task) {
 }
 
 export function harverst(harverster: Creep, harverstTask: Task) {
-    const source = room.find(FIND_SOURCES).find(sou => sou.id === harverstTask.targetId);
+    const source = harverster.room.find(FIND_SOURCES).find(sou => sou.id === harverstTask.targetId);
     const container = source.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: stru => stru.structureType === STRUCTURE_CONTAINER
     });

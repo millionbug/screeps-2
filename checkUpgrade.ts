@@ -7,7 +7,7 @@ export function checkUpgrade() {
     if (!list.length) {
         TaskList.addTask({
             action: TaskAction.upgrade,
-            targetId: room.controller.id,
+            targetId: room.instance.controller.id,
             couldCancel: () => {
                 return Boolean(TaskList.list.length > 1);
             }
@@ -15,12 +15,12 @@ export function checkUpgrade() {
         return;
     }
 
-    if (room.controller.ticksToDowngrade < 9000) {
+    if (room.instance.controller.ticksToDowngrade < 9000) {
         TaskList.addTask({
             action: TaskAction.upgrade,
-            targetId: room.controller.id,
+            targetId: room.instance.controller.id,
             couldCancel: () => {
-                return room.controller.ticksToDowngrade > 10000;
+                return room.instance.controller.ticksToDowngrade > 10000;
             }
         })
     }

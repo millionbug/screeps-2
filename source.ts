@@ -22,7 +22,7 @@ class SourceGlobal {
     }
 
     updateSourceList() {
-        this.sourcesList = room.find(FIND_SOURCES);
+        this.sourcesList = room.instance.find(FIND_SOURCES);
     }
 
     getSourceTarget(id: string): Source | StructureContainer {

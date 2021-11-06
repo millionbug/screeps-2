@@ -9,7 +9,7 @@ class StructureGlobal {
     } = {};
 
     updateStructuresList() {
-        this.structuresList = room.find(FIND_STRUCTURES);
+        this.structuresList = room.instance.find(FIND_STRUCTURES);
         this.cacheList = {};
     }
 

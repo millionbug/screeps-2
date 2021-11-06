@@ -9,19 +9,19 @@ function checkUpgrade() {
     if (!list.length) {
         task_1.default.addTask({
             action: task_1.TaskAction.upgrade,
-            targetId: room_1.room.controller.id,
+            targetId: room_1.room.instance.controller.id,
             couldCancel: () => {
                 return Boolean(task_1.default.list.length > 1);
             }
         });
         return;
     }
-    if (room_1.room.controller.ticksToDowngrade < 9000) {
+    if (room_1.room.instance.controller.ticksToDowngrade < 9000) {
         task_1.default.addTask({
             action: task_1.TaskAction.upgrade,
-            targetId: room_1.room.controller.id,
+            targetId: room_1.room.instance.controller.id,
             couldCancel: () => {
-                return room_1.room.controller.ticksToDowngrade > 10000;
+                return room_1.room.instance.controller.ticksToDowngrade > 10000;
             }
         });
     }
