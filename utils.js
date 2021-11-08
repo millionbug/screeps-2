@@ -9,6 +9,7 @@ function updateGlobalAtLoop() {
     source_1.sourceGlobal.updateSourceList();
     structure_1.structureGlobal.updateStructuresList();
     room_1.room.updateRoom();
+    creepsList_1.enemyList.updateEnemysList();
     (0, creepsList_1.updateCreepsList)();
 }
 exports.updateGlobalAtLoop = updateGlobalAtLoop;

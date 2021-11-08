@@ -1,18 +1,27 @@
 import CreepsList from './creepsList';
 import TaskList, { TaskAction, WorkingStatus } from './task';
-import { upGraderWork, buildWork, repairWork, harverstWork, transferWrok } from './work';
+import { upGraderWork, buildWork, repairWork, harverstWork, transferWrok, attack } from './work';
 
 
 export function goToWork() {
-    const { repairers, builders, upGraders, harversters, transfers } = CreepsList;
+    const { repairers, builders, upGraders, harversters, transfers, attackers } = CreepsList;
     
     const repairTask = TaskList.list.find(task => task.action === TaskAction.repair);
     const buildTask = TaskList.list.find(task => task.action === TaskAction.build);
     const upGradeTask = TaskList.list.find(task => task.action === TaskAction.upgrade);
     const harverstTasks = TaskList.list.filter(task => task.action === TaskAction.harvest);
     const transferTask = TaskList.list.find(task => task.action === TaskAction.transfer);
+    const attackTask = TaskList.list.find(task => task.action === TaskAction.attack);
 
-    let notWorkCreeps: Creep[] = []
+
+    let notWorkCreeps: Creep[] = [];
+
+    if (attackTask) {
+        // console.log('attacking', attackers.length)
+        attackers.forEach(creep => {
+            attack(creep, attackTask);
+        });
+    }
 
     if (repairTask) {
         repairers.forEach(repairer => {

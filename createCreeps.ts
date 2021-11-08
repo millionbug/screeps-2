@@ -63,16 +63,23 @@ function createHaverster() {
 }
 
 export function createCreeps() {
-    const { repairers, builders, upGraders, harversters, transfers } = CreepsList;
+    const { repairers, builders, upGraders, harversters, transfers, attackers } = CreepsList;
     const repairTask = TaskList.list.find(task => task.action === TaskAction.repair);
     const buildTask = TaskList.list.find(task => task.action === TaskAction.build);
     const upGradeTask = TaskList.list.find(task => task.action === TaskAction.upgrade);
     const harverstTasks = TaskList.list.filter(task => task.action === TaskAction.harvest);
     const transferTask = TaskList.list.find(task => task.action === TaskAction.transfer);
+    const attackTask = TaskList.list.find(task => task.action === TaskAction.attack);
 
     // transfer 任务例外，否则永远停不下来
     if (transferTask && transfers.length < 6) {
         Create(TaskAction.transfer);
+    }
+
+    if (attackTask && attackers.length < 3) {
+        Create(TaskAction.attack, {
+            body: [ATTACK, ATTACK, MOVE]
+        });
     }
 
     if (repairers.length < 2 && repairTask) {

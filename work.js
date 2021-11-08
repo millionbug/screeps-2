@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.transferWrok = exports.trans = exports.harverstWork = exports.harverst = exports.repairWork = exports.repair = exports.buildWork = exports.build = exports.upGraderWork = exports.upGrader = exports.work = exports.getEnerge = void 0;
+exports.attack = exports.transferWrok = exports.trans = exports.harverstWork = exports.harverst = exports.repairWork = exports.repair = exports.buildWork = exports.build = exports.upGraderWork = exports.upGrader = exports.work = exports.getEnerge = void 0;
 const task_1 = require("./task");
 const source_1 = require("./source");
-const structure_1 = require("structure");
+const structure_1 = require("./structure");
+const creepsList_1 = require("./creepsList");
 function getEnerge(creep, target) {
     if (target.structureType) {
         return creep.withdraw(target, RESOURCE_ENERGY);
@@ -87,7 +88,7 @@ function repair(repairer, repairTask) {
             repairer.moveTo(target);
         }
         else if (repairer.memory.workStatus === task_1.WorkingStatus.repairing) {
-            if (repairer.repair(target) === ERR_NOT_ENOUGH_ENERGY) {
+            if (result === ERR_NOT_ENOUGH_ENERGY) {
                 repairer.memory.workStatus = task_1.WorkingStatus.harvesting;
             }
             ;
@@ -144,3 +145,14 @@ function transferWrok(creep, transferTask) {
     work(creep, trans(creep, transferTask));
 }
 exports.transferWrok = transferWrok;
+function attack(creep, attackTask) {
+    // return () => {
+    const enemy = creepsList_1.enemyList.getEnemy(attackTask.targetId);
+    const result = creep.attack(enemy);
+    creep.say(result.toString());
+    if (result == ERR_NOT_IN_RANGE) {
+        creep.moveTo(enemy);
+    }
+    // }
+}
+exports.attack = attack;

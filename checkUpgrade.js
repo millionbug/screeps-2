@@ -4,7 +4,9 @@ exports.checkUpgrade = void 0;
 const room_1 = require("./room");
 const task_1 = require("./task");
 function checkUpgrade() {
-    const list = task_1.default.list.filter(task => task.action !== task_1.TaskAction.harvest);
+    const list = task_1.default.list.filter(task => {
+        return [task_1.TaskAction.repair, task_1.TaskAction.build].includes(task.action);
+    });
     // todo 非采集任务为空时
     if (!list.length) {
         task_1.default.addTask({

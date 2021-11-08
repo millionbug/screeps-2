@@ -5,13 +5,20 @@ const creepsList_1 = require("./creepsList");
 const task_1 = require("./task");
 const work_1 = require("./work");
 function goToWork() {
-    const { repairers, builders, upGraders, harversters, transfers } = creepsList_1.default;
+    const { repairers, builders, upGraders, harversters, transfers, attackers } = creepsList_1.default;
     const repairTask = task_1.default.list.find(task => task.action === task_1.TaskAction.repair);
     const buildTask = task_1.default.list.find(task => task.action === task_1.TaskAction.build);
     const upGradeTask = task_1.default.list.find(task => task.action === task_1.TaskAction.upgrade);
     const harverstTasks = task_1.default.list.filter(task => task.action === task_1.TaskAction.harvest);
     const transferTask = task_1.default.list.find(task => task.action === task_1.TaskAction.transfer);
+    const attackTask = task_1.default.list.find(task => task.action === task_1.TaskAction.attack);
     let notWorkCreeps = [];
+    if (attackTask) {
+        // console.log('attacking', attackers.length)
+        attackers.forEach(creep => {
+            (0, work_1.attack)(creep, attackTask);
+        });
+    }
     if (repairTask) {
         repairers.forEach(repairer => {
             (0, work_1.repairWork)(repairer, repairTask);

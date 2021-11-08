@@ -10,10 +10,12 @@ const task_1 = require("./task");
 const checkHarverst_1 = require("./checkHarverst");
 const checkExtension_1 = require("./checkExtension");
 const utils_1 = require("./utils");
+const checkHostile_1 = require("./checkHostile");
 function loop() {
     // 检查所有的资源
     (0, utils_1.updateGlobalAtLoop)();
     task_1.default.checkList();
+    (0, checkHostile_1.checkAttackTask)();
     (0, checkHarverst_1.checkHarverstTask)();
     (0, checkRepair_1.checkRepairTask)();
     (0, checkBuild_1.checkBuildTask)();

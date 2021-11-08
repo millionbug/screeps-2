@@ -2,7 +2,9 @@ import { room } from './room';
 import TaskList, { TaskAction } from './task';
 
 export function checkUpgrade() {
-    const list = TaskList.list.filter(task => task.action !== TaskAction.harvest);
+    const list = TaskList.list.filter(task => {
+        return [TaskAction.repair, TaskAction.build].includes(task.action);
+    });
     // todo 非采集任务为空时
     if (!list.length) {
         TaskList.addTask({

@@ -7,6 +7,7 @@ import TaskList from './task';
 import { checkHarverstTask } from './checkHarverst';
 import { checkTransferTask } from './checkExtension';
 import { updateGlobalAtLoop } from './utils';
+import { checkAttackTask } from './checkHostile';
 
 export function loop() {
     // 检查所有的资源
@@ -14,6 +15,7 @@ export function loop() {
 
     TaskList.checkList();
 
+    checkAttackTask();
     checkHarverstTask();
     checkRepairTask();
     checkBuildTask();

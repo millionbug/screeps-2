@@ -59,15 +59,21 @@ function createHaverster() {
     });
 }
 function createCreeps() {
-    const { repairers, builders, upGraders, harversters, transfers } = creepsList_1.default;
+    const { repairers, builders, upGraders, harversters, transfers, attackers } = creepsList_1.default;
     const repairTask = task_1.default.list.find(task => task.action === task_1.TaskAction.repair);
     const buildTask = task_1.default.list.find(task => task.action === task_1.TaskAction.build);
     const upGradeTask = task_1.default.list.find(task => task.action === task_1.TaskAction.upgrade);
     const harverstTasks = task_1.default.list.filter(task => task.action === task_1.TaskAction.harvest);
     const transferTask = task_1.default.list.find(task => task.action === task_1.TaskAction.transfer);
+    const attackTask = task_1.default.list.find(task => task.action === task_1.TaskAction.attack);
     // transfer 任务例外，否则永远停不下来
     if (transferTask && transfers.length < 6) {
         Create(task_1.TaskAction.transfer);
+    }
+    if (attackTask && attackers.length < 3) {
+        Create(task_1.TaskAction.attack, {
+            body: [ATTACK, ATTACK, MOVE]
+        });
     }
     if (repairers.length < 2 && repairTask) {
         Create(task_1.TaskAction.repair);

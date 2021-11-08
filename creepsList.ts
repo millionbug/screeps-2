@@ -1,5 +1,6 @@
 import { TaskAction } from './task';
 import sourceTable from './source';
+import { room } from './room';
 export class CreepsList {
     creepsNumb: number;
     repairers: Creep[] = [];
@@ -7,7 +8,23 @@ export class CreepsList {
     upGraders: Creep[] = [];
     harversters: Creep[] = [];
     transfers: Creep[] = [];
+    attackers: Creep[] = [];
 }
+
+export class EnemysList {
+    list: Array<Creep | PowerCreep>;
+    updateEnemysList() {
+        this.list = room.instance.find(FIND_HOSTILE_CREEPS)
+        //  @ts-ignore
+                    .concat(room.instance.find(FIND_HOSTILE_POWER_CREEPS))
+    }
+
+    getEnemy(id: string) {
+        return this.list.find(enemy => enemy.id === id);
+    }
+}
+
+export const enemyList = new EnemysList();
 
 const ListInstance = new CreepsList();
 
@@ -28,6 +45,7 @@ export function updateCreepsList() {
     ListInstance.upGraders = [];
     ListInstance.harversters = [];
     ListInstance.transfers = [];
+    ListInstance.attackers = [];
 
     // 清除已死去的 creep 的 memory 信息
     checkActive();
@@ -50,8 +68,10 @@ export function updateCreepsList() {
         if (creep.memory.action === TaskAction.transfer) {
             ListInstance.transfers.push(creep);
         }
+        if (creep.memory.action === TaskAction.attack) {
+            ListInstance.attackers.push(creep);
+        }
     });
-    const { repairers, builders, upGraders, harversters, transfers } = ListInstance;
     ListInstance.creepsNumb = creeps.length;
 }
 

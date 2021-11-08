@@ -1,6 +1,7 @@
 import TaskList, { Task, TaskAction, WorkingStatus } from './task';
 import sourceTable, { sourceGlobal } from './source';
-import { structureGlobal } from 'structure';
+import { structureGlobal } from './structure';
+import { enemyList } from './creepsList';
 
 export function getEnerge(creep: Creep, target: Source | StructureContainer) {
     if ((target as StructureContainer).structureType) {
@@ -78,7 +79,7 @@ export function repair(repairer: Creep, repairTask: Task) {
         if(result == ERR_NOT_IN_RANGE) {
             repairer.moveTo(target);
         } else if (repairer.memory.workStatus === WorkingStatus.repairing) {
-            if (repairer.repair(target) === ERR_NOT_ENOUGH_ENERGY) {
+            if (result === ERR_NOT_ENOUGH_ENERGY) {
                 repairer.memory.workStatus = WorkingStatus.harvesting;
             };
         } else {
@@ -127,4 +128,15 @@ export function trans(creep: Creep, transferTask: Task) {
 
 export function transferWrok(creep: Creep, transferTask: Task) {
     work(creep, trans(creep, transferTask));
+}
+
+export function attack(creep: Creep, attackTask: Task) {
+    // return () => {
+        const enemy = enemyList.getEnemy(attackTask.targetId);
+        const result = creep.attack(enemy);
+        creep.say(result.toString());
+        if(result == ERR_NOT_IN_RANGE) {
+            creep.moveTo(enemy);
+        }
+    // }
 }
