@@ -22,7 +22,7 @@ export enum WorkingStatus {
 export interface Task {
     action: TaskAction;
     targetId: string;
-    currentWorkerName?: string;
+    currentWorkerName?: string[];
     couldCancel: () => boolean;
 }
 
