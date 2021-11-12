@@ -26,7 +26,7 @@ class SourceGlobal {
     }
 
     getSourceTarget(id: string): Source | StructureContainer {
-        const containers = structureGlobal.findStructureByType(STRUCTURE_CONTAINER) as StructureContainer[];
+        const containers = structureGlobal.findStructureByType(STRUCTURE_CONTAINER);
         return this.sourcesList.find(s => s.id === id) || containers.find(con => con.id === id);
     }
 };
@@ -41,7 +41,7 @@ class sourceTable {
     containerMap: EnergySource[] = [];
 
     sourceCheck() {
-        const containers = structureGlobal.findStructureByType(STRUCTURE_CONTAINER) as StructureContainer[];
+        const containers = structureGlobal.findStructureByType(STRUCTURE_CONTAINER);
         containers.forEach(con => {
             if (!this[con.id]) {
                 this[con.id] = [];
@@ -117,7 +117,7 @@ class sourceTable {
             return this.findSourceAble(creep);
         }
 
-        const containers = structureGlobal.findStructureByType(STRUCTURE_CONTAINER) as StructureContainer[];
+        const containers = structureGlobal.findStructureByType(STRUCTURE_CONTAINER);
         if (containers.length) {
             containers.find(con => {
 

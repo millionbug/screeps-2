@@ -18,7 +18,8 @@ export function isFull(structure: StructureSpawn | StructureExtension) {
 }
 
 export function checkAllCHits() {
-    const structures = structureGlobal.findStructureByType(STRUCTURE_ROAD)
+    const structures: Array<StructureRoad | StructureContainer> = structureGlobal.findStructureByType(STRUCTURE_ROAD)
+    // @ts-ignore
     .concat(structureGlobal.findStructureByType(STRUCTURE_CONTAINER));
     return Object.keys(structures).map((key, index) => {
         const structure = structures[key];
